@@ -15,11 +15,11 @@ async function countDocuments(database: sqlite3.Database): Promise<number> {
   return new Promise((resolve, reject) => {
     database.get(
       `SELECT COUNT(*) as documentCount FROM documents`,
-      (error, row) => {
+      (error: Error, row: { documentCount: string }) => {
         if (error) {
           reject(error);
         } else {
-          resolve(parseInt((row as any).documentCount));
+          resolve(parseInt(row.documentCount));
         }
       },
     );
