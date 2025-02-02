@@ -19,34 +19,42 @@ import {
   ChartTooltipContent,
 } from "@arbetsmarknad/components/Chart";
 
-type AsbestosPieChartProps = {
+type PercentagePieChartProps = {
   title: string;
   description: string;
   numerator: number;
   denominator: number;
+  numeratorLabel: string;
+  complementLabel: string;
+  percentSuffix: string;
+  footer: React.ReactNode;
 };
 
-export const AsbestosPieChart: FC<AsbestosPieChartProps> = ({
+export const PercentagePieChart: FC<PercentagePieChartProps> = ({
   title,
   description,
   numerator,
   denominator,
+  numeratorLabel,
+  complementLabel,
+  percentSuffix,
+  footer,
 }) => {
   const complement = denominator - numerator;
   const chartData = [
     {
-      browser: "Asbest",
-      visitors: numerator,
+      name: numeratorLabel,
+      data: numerator,
       fill: "black",
     },
     {
-      browser: "Icke-asbest",
-      visitors: complement,
+      name: complementLabel,
+      data: complement,
       fill: "#bbb",
     },
   ];
 
-  const percentAsbestos = Math.round((numerator / denominator) * 100);
+  const percent = Math.round((numerator / denominator) * 100);
 
   return (
     <Card className="flex flex-col">
@@ -68,8 +76,8 @@ export const AsbestosPieChart: FC<AsbestosPieChartProps> = ({
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="data"
+              nameKey="name"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -88,14 +96,14 @@ export const AsbestosPieChart: FC<AsbestosPieChartProps> = ({
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {`${percentAsbestos}%`}
+                          {`${percent}%`}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Asbest
+                          {percentSuffix}
                         </tspan>
                       </text>
                     );
@@ -108,7 +116,7 @@ export const AsbestosPieChart: FC<AsbestosPieChartProps> = ({
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Av totalt {numerator} handlingar är {numerator} p.g.a. asbest.
+          {footer}
         </div>
       </CardFooter>
     </Card>
