@@ -126,7 +126,12 @@ export default async function Home() {
             totalDocuments={totalDocuments}
             documentsPerDay={documentsPerDay}
           />
-          <AsbestosPieChart {...asbestosTotals} />
+          <AsbestosPieChart
+            title="Asbesthandlingar"
+            description="Andelen handlingar som innehåller ordet 'asbest'"
+            numerator={asbestosTotals.asbestosDocumentTotal}
+            denominator={totalDocuments}
+          />
         </Container>
       </main>
     </Page>
