@@ -19,20 +19,6 @@ import {
   ChartTooltipContent,
 } from "@arbetsmarknad/components/Chart";
 
-const chartConfig = {
-  documentCount: {
-    label: "Handlingar",
-  },
-  asbestos: {
-    label: "Asbestos",
-    color: "white",
-  },
-  nonAsbestos: {
-    label: "Non-asbestos",
-    color: "black",
-  },
-} satisfies ChartConfig;
-
 type AsbestosPieChartProps = {
   asbestosDocumentTotal: number;
   nonAsbestosDocumentTotal: number;
@@ -44,16 +30,17 @@ export const AsbestosPieChart: FC<AsbestosPieChartProps> = ({
 }) => {
   const chartData = [
     {
-      browser: "Asbestos",
+      browser: "Asbest",
       visitors: asbestosDocumentTotal,
       fill: "black",
     },
     {
-      browser: "Non-asbestos",
+      browser: "Icke-asbest",
       visitors: nonAsbestosDocumentTotal,
       fill: "#bbb",
     },
   ];
+
   const percentAsbestos = Math.round(
     (asbestosDocumentTotal /
       (asbestosDocumentTotal + nonAsbestosDocumentTotal)) *
@@ -68,13 +55,15 @@ export const AsbestosPieChart: FC<AsbestosPieChartProps> = ({
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
-          config={chartConfig}
+          config={{}}
           className="mx-auto aspect-square max-h-[250px]"
         >
           <PieChart>
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              content={
+                <ChartTooltipContent className="w-[150px] bg-white" hideLabel />
+              }
             />
             <Pie
               data={chartData}
