@@ -10,8 +10,15 @@ import { HeaderMenu } from "@arbetsmarknad/components/HeaderMenu";
 import { Page } from "@arbetsmarknad/components/Page";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import sqlite3 from "sqlite3";
-import { DocumentsPerDayChart } from "../components/DocumentsPerDayChart";
+import { DocumentsPerDayChart } from "@/components/DocumentsPerDayChart";
 import { PercentagePieChart } from "@/components/PercentagePieChart";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: `Arbetsmiljö ${process.env.NEXT_PUBLIC_YEAR}`,
+  };
+}
 
 async function countTotalDocuments(
   database: sqlite3.Database,
@@ -107,6 +114,12 @@ export default async function Home() {
       <Breadcrumb className="py-4 w-full flex justify-center">
         <Container>
           <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="https://arbetsmarknad.github.io/">
+                Arbetsmarknad
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink href="/">Arbetsmiljö</BreadcrumbLink>
             </BreadcrumbItem>
