@@ -18,17 +18,9 @@ import {
 } from "@arbetsmarknad/components/Chart";
 
 const chartConfig = {
-  views: {
-    label: "Page Views",
-    color: "hsl(var(--chart-1))",
-  },
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
+  documentCount: {
+    label: "Handlingar",
+    color: "black",
   },
 } satisfies ChartConfig;
 
@@ -81,7 +73,7 @@ export const DocumentsPerDayChart: FC<DocumentsPerDayChartProps> = ({
               minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
+                return date.toLocaleDateString("sv-SE", {
                   month: "short",
                   day: "numeric",
                 });
@@ -93,7 +85,7 @@ export const DocumentsPerDayChart: FC<DocumentsPerDayChartProps> = ({
                   className="w-[150px] bg-white"
                   nameKey="documentCount"
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
+                    return new Date(value).toLocaleDateString("sv-SE", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
