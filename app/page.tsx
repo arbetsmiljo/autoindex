@@ -12,7 +12,7 @@ import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import sqlite3 from "sqlite3";
 import { DocumentsPerDayChart } from "../components/DocumentsPerDayChart";
 
-export async function countTotalDocuments(
+async function countTotalDocuments(
   database: sqlite3.Database,
 ): Promise<number> {
   return new Promise((resolve, reject) => {
@@ -29,7 +29,7 @@ export async function countTotalDocuments(
   });
 }
 
-export async function countDocumentsPerDay(
+async function countDocumentsPerDay(
   database: sqlite3.Database,
 ): Promise<{ date: string; documentCount: number }[]> {
   return new Promise((resolve, reject) => {
