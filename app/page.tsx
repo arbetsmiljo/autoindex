@@ -10,9 +10,11 @@ import { HeaderMenu } from "@arbetsmarknad/components/HeaderMenu";
 import { Page } from "@arbetsmarknad/components/Page";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import sqlite3 from "sqlite3";
-import { Chart } from "../components/Chart";
+import { DocumentsPerDayChart } from "../components/DocumentsPerDayChart";
 
-async function countDocuments(database: sqlite3.Database): Promise<number> {
+export async function countTotalDocuments(
+  database: sqlite3.Database,
+): Promise<number> {
   return new Promise((resolve, reject) => {
     database.get(
       `SELECT COUNT(*) as documentCount FROM documents`,
@@ -27,9 +29,9 @@ async function countDocuments(database: sqlite3.Database): Promise<number> {
   });
 }
 
-async function countDocumentsPerDay(
+export async function countDocumentsPerDay(
   database: sqlite3.Database,
-): Promise<Record<string, number>> {
+): Promise<{ date: string; documentCount: number }[]> {
   return new Promise((resolve, reject) => {
     database.all(
       `SELECT documentDate, COUNT(*) as documentCount FROM documents GROUP BY documentDate ORDER BY documentDate`,
@@ -40,11 +42,14 @@ async function countDocumentsPerDay(
         if (error) {
           reject(error);
         } else {
-          const documentCountPerDay: { [key: string]: number } = {};
+          const output: { date: string; documentCount: number }[] = [];
           rows.forEach((row) => {
-            documentCountPerDay[row.documentDate] = parseInt(row.documentCount);
+            output.push({
+              date: row.documentDate,
+              documentCount: parseInt(row.documentCount),
+            });
           });
-          resolve(documentCountPerDay);
+          resolve(output);
         }
       },
     );
@@ -55,8 +60,9 @@ export default async function Home() {
   const directoryPath = process.env.SOURCE_DIRECTORY_PATH;
   const databasePath = `${directoryPath}/db.sqlite`;
   const database = new sqlite3.Database(databasePath);
-  const documentCount = await countDocuments(database);
-  const documentCountPerDay = await countDocumentsPerDay(database);
+
+  const totalDocuments = await countTotalDocuments(database);
+  const documentsPerDay = await countDocumentsPerDay(database);
 
   return (
     <Page>
@@ -84,31 +90,9 @@ export default async function Home() {
           <TopLevelHeading
             text={`Arbetsmiljö ${process.env.NEXT_PUBLIC_YEAR}`}
           />
-          <p>Testing</p>
-          <p>{`Document count: ${documentCount}`}</p>
-          <Chart
-            data={{
-              labels: Object.keys(documentCountPerDay),
-              datasets: [
-                {
-                  label: "Documents",
-                  data: Object.values(documentCountPerDay),
-                  backgroundColor: "rgba(255, 99, 132, 0.5)",
-                },
-              ],
-            }}
-            options={{
-              plugins: {
-                legend: {
-                  display: false,
-                  position: "top",
-                },
-              },
-              title: {
-                display: true,
-                text: "Documents per day",
-              },
-            }}
+          <DocumentsPerDayChart
+            totalDocuments={totalDocuments}
+            documentsPerDay={documentsPerDay}
           />
         </Container>
       </main>
