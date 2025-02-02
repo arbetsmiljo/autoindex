@@ -13,7 +13,6 @@ import {
 } from "@arbetsmarknad/components/Card";
 
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
