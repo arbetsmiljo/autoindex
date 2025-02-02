@@ -20,38 +20,39 @@ import {
 } from "@arbetsmarknad/components/Chart";
 
 type AsbestosPieChartProps = {
-  asbestosDocumentTotal: number;
-  nonAsbestosDocumentTotal: number;
+  title: string;
+  description: string;
+  numerator: number;
+  denominator: number;
 };
 
 export const AsbestosPieChart: FC<AsbestosPieChartProps> = ({
-  asbestosDocumentTotal,
-  nonAsbestosDocumentTotal,
+  title,
+  description,
+  numerator,
+  denominator,
 }) => {
+  const complement = denominator - numerator;
   const chartData = [
     {
       browser: "Asbest",
-      visitors: asbestosDocumentTotal,
+      visitors: numerator,
       fill: "black",
     },
     {
       browser: "Icke-asbest",
-      visitors: nonAsbestosDocumentTotal,
+      visitors: complement,
       fill: "#bbb",
     },
   ];
 
-  const percentAsbestos = Math.round(
-    (asbestosDocumentTotal /
-      (asbestosDocumentTotal + nonAsbestosDocumentTotal)) *
-      100,
-  );
+  const percentAsbestos = Math.round((numerator / denominator) * 100);
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Asbesthandlingar</CardTitle>
-        <CardDescription>Jamfört med totalt</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -107,8 +108,7 @@ export const AsbestosPieChart: FC<AsbestosPieChartProps> = ({
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Av totalt {asbestosDocumentTotal + nonAsbestosDocumentTotal}{" "}
-          handlingar är {asbestosDocumentTotal} p.g.a. asbest.
+          Av totalt {numerator} handlingar är {numerator} p.g.a. asbest.
         </div>
       </CardFooter>
     </Card>
