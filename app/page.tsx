@@ -57,18 +57,31 @@ async function countDocumentsPerDay(
   });
 }
 
-async function countAsbestos(database: sqlite3.Database): Promise<number> {
+async function countCaseNameKeywordMatches(
+  database: sqlite3.Database,
+  keywords: string[],
+): Promise<Record<string, number>> {
   return new Promise((resolve, reject) => {
-    database.get(
-      `SELECT SUM(CASE WHEN caseName LIKE '%asbest%' THEN 1 ELSE 0 END) AS total FROM documents;`,
-      (error: Error, rows: { total: string }) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(parseInt(rows.total));
+    const conditions = keywords
+      .map(
+        (keyword) =>
+          `SUM(CASE WHEN caseName LIKE '%${keyword}%' THEN 1 ELSE 0 END) AS "${keyword}"`,
+      )
+      .join(", ");
+
+    const query = `SELECT ${conditions} FROM documents;`;
+
+    database.get(query, (error: Error, rows: Record<string, string>) => {
+      if (error) {
+        reject(error);
+      } else {
+        const result: Record<string, number> = {};
+        for (const key in rows) {
+          result[key] = parseInt(rows[key]) || 0;
         }
-      },
-    );
+        resolve(result);
+      }
+    });
   });
 }
 
@@ -79,7 +92,11 @@ export default async function Home() {
 
   const totalDocuments = await countTotalDocuments(database);
   const documentsPerDay = await countDocumentsPerDay(database);
-  const asbestosTotal = await countAsbestos(database);
+  const keywordMatches = await countCaseNameKeywordMatches(database, [
+    "asbest",
+    "inspektion",
+  ]);
+  console.log(keywordMatches);
 
   return (
     <Page>
@@ -111,21 +128,40 @@ export default async function Home() {
             totalDocuments={totalDocuments}
             documentsPerDay={documentsPerDay}
           />
-          <PercentagePieChart
-            title="Asbesthandlingar"
-            description="Andelen handlingar som innehåller ordet 'asbest'"
-            numerator={asbestosTotal}
-            denominator={totalDocuments}
-            numeratorLabel="Asbest"
-            complementLabel="Icke-asbest"
-            percentSuffix="Asbest"
-            footer={
-              <>
-                Av totalt {asbestosTotal} handlingar är {totalDocuments} p.g.a.
-                asbest.
-              </>
-            }
-          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+            <PercentagePieChart
+              title="Inspektionshandlingar"
+              description="Andelen handlingar som innehåller ordet 'inspektion'"
+              numerator={keywordMatches.inspektion}
+              denominator={totalDocuments}
+              numeratorLabel="Inspektion"
+              complementLabel="Icke-inspektion"
+              percentSuffix="Inspektioner"
+              footer={
+                <>
+                  Av totalt {totalDocuments} handlingar är{" "}
+                  {keywordMatches.inspektion} p.g.a. inspektioner.
+                </>
+              }
+            />
+
+            <PercentagePieChart
+              title="Asbesthandlingar"
+              description="Andelen handlingar som innehåller ordet 'asbest'"
+              numerator={keywordMatches.asbest}
+              denominator={totalDocuments}
+              numeratorLabel="Asbest"
+              complementLabel="Icke-asbest"
+              percentSuffix="Asbest"
+              footer={
+                <>
+                  Av totalt {totalDocuments} handlingar är{" "}
+                  {keywordMatches.asbest} p.g.a. asbest.
+                </>
+              }
+            />
+          </div>
         </Container>
       </main>
     </Page>
