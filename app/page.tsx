@@ -11,6 +11,7 @@ import { Page } from "@arbetsmarknad/components/Page";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import sqlite3 from "sqlite3";
 import { DocumentsPerDayChart } from "../components/DocumentsPerDayChart";
+import { AsbestosPieChart } from "@/components/AsbestosPieChart";
 
 async function countTotalDocuments(
   database: sqlite3.Database,
@@ -56,6 +57,36 @@ async function countDocumentsPerDay(
   });
 }
 
+async function countAsbestosTotals(database: sqlite3.Database): Promise<{
+  asbestosDocumentTotal: number;
+  nonAsbestosDocumentTotal: number;
+}> {
+  return new Promise((resolve, reject) => {
+    database.get(
+      `SELECT
+          SUM(CASE WHEN caseName LIKE '%asbest%' THEN 1 ELSE 0 END) AS asbestosDocumentTotal,
+          SUM(CASE WHEN caseName NOT LIKE '%asbest%' THEN 1 ELSE 0 END) AS nonAsbestosDocumentTotal
+      FROM documents;`,
+      (
+        error: Error,
+        rows: {
+          asbestosDocumentTotal: string;
+          nonAsbestosDocumentTotal: string;
+        },
+      ) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve({
+            asbestosDocumentTotal: parseInt(rows.asbestosDocumentTotal),
+            nonAsbestosDocumentTotal: parseInt(rows.nonAsbestosDocumentTotal),
+          });
+        }
+      },
+    );
+  });
+}
+
 export default async function Home() {
   const directoryPath = process.env.SOURCE_DIRECTORY_PATH;
   const databasePath = `${directoryPath}/db.sqlite`;
@@ -63,6 +94,7 @@ export default async function Home() {
 
   const totalDocuments = await countTotalDocuments(database);
   const documentsPerDay = await countDocumentsPerDay(database);
+  const asbestosTotals = await countAsbestosTotals(database);
 
   return (
     <Page>
@@ -94,6 +126,7 @@ export default async function Home() {
             totalDocuments={totalDocuments}
             documentsPerDay={documentsPerDay}
           />
+          <AsbestosPieChart {...asbestosTotals} />
         </Container>
       </main>
     </Page>
