@@ -11,7 +11,7 @@ import { Page } from "@arbetsmarknad/components/Page";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import sqlite3 from "sqlite3";
 import { DocumentsPerDayChart } from "../components/DocumentsPerDayChart";
-import { AsbestosPieChart } from "@/components/AsbestosPieChart";
+import { PercentagePieChart } from "@/components/PercentagePieChart";
 
 async function countTotalDocuments(
   database: sqlite3.Database,
@@ -57,30 +57,15 @@ async function countDocumentsPerDay(
   });
 }
 
-async function countAsbestosTotals(database: sqlite3.Database): Promise<{
-  asbestosDocumentTotal: number;
-  nonAsbestosDocumentTotal: number;
-}> {
+async function countAsbestos(database: sqlite3.Database): Promise<number> {
   return new Promise((resolve, reject) => {
     database.get(
-      `SELECT
-          SUM(CASE WHEN caseName LIKE '%asbest%' THEN 1 ELSE 0 END) AS asbestosDocumentTotal,
-          SUM(CASE WHEN caseName NOT LIKE '%asbest%' THEN 1 ELSE 0 END) AS nonAsbestosDocumentTotal
-      FROM documents;`,
-      (
-        error: Error,
-        rows: {
-          asbestosDocumentTotal: string;
-          nonAsbestosDocumentTotal: string;
-        },
-      ) => {
+      `SELECT SUM(CASE WHEN caseName LIKE '%asbest%' THEN 1 ELSE 0 END) AS total FROM documents;`,
+      (error: Error, rows: { total: string }) => {
         if (error) {
           reject(error);
         } else {
-          resolve({
-            asbestosDocumentTotal: parseInt(rows.asbestosDocumentTotal),
-            nonAsbestosDocumentTotal: parseInt(rows.nonAsbestosDocumentTotal),
-          });
+          resolve(parseInt(rows.total));
         }
       },
     );
@@ -94,7 +79,7 @@ export default async function Home() {
 
   const totalDocuments = await countTotalDocuments(database);
   const documentsPerDay = await countDocumentsPerDay(database);
-  const asbestosTotals = await countAsbestosTotals(database);
+  const asbestosTotal = await countAsbestos(database);
 
   return (
     <Page>
@@ -126,11 +111,20 @@ export default async function Home() {
             totalDocuments={totalDocuments}
             documentsPerDay={documentsPerDay}
           />
-          <AsbestosPieChart
+          <PercentagePieChart
             title="Asbesthandlingar"
             description="Andelen handlingar som innehåller ordet 'asbest'"
-            numerator={asbestosTotals.asbestosDocumentTotal}
+            numerator={asbestosTotal}
             denominator={totalDocuments}
+            numeratorLabel="Asbest"
+            complementLabel="Icke-asbest"
+            percentSuffix="Asbest"
+            footer={
+              <>
+                Av totalt {asbestosTotal} handlingar är {totalDocuments} p.g.a.
+                asbest.
+              </>
+            }
           />
         </Container>
       </main>
