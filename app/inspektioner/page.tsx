@@ -10,7 +10,7 @@ import { HeaderMenu } from "@arbetsmarknad/components/HeaderMenu";
 import { Page } from "@arbetsmarknad/components/Page";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import sqlite3 from "sqlite3";
-import { DocumentsPerDayChart } from "@/components/DocumentsPerDayChart";
+import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function countCasesPerDay(
   database: sqlite3.Database,
-): Promise<{ date: string; documentCount: number }[]> {
+): Promise<{ date: string; value: number }[]> {
   return new Promise((resolve, reject) => {
     database.all(
       `SELECT documentDate, COUNT(*) as documentCount FROM documents WHERE caseName LIKE '%inspektion%' AND documentId LIKE '%-1' GROUP BY documentDate ORDER BY documentDate`,
@@ -36,7 +36,7 @@ async function countCasesPerDay(
           rows.forEach((row) => {
             output.push({
               date: row.documentDate,
-              documentCount: parseInt(row.documentCount),
+              value: parseInt(row.documentCount),
             });
           });
           resolve(output);
@@ -93,12 +93,10 @@ export default async function Inspections() {
           <TopLevelHeading
             text={`Arbetsmiljöinspektioner ${process.env.NEXT_PUBLIC_YEAR}`}
           />
-          <DocumentsPerDayChart
-            totalDocuments={casesPerDay.reduce(
-              (acc, { documentCount }) => acc + documentCount,
-              0,
-            )}
-            documentsPerDay={casesPerDay}
+          <DateRangeBarChart
+            title="Ärenden per dag"
+            description="Antal nya ärenden som innehåller ordet 'inspektion' per dag"
+            data={casesPerDay}
           />
         </Container>
       </main>
