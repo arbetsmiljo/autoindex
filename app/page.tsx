@@ -139,6 +139,7 @@ export default async function Home() {
             title="Handlingar per dag"
             description="Visar antalet handlingar per dag genom året."
             data={documentsPerDay}
+            valueLabel="Handlingar"
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
@@ -161,6 +162,7 @@ export default async function Home() {
 
             <PercentagePieChart
               title="Asbesthandlingar"
+              href={`/${process.env.NEXT_PUBLIC_YEAR}/asbest`}
               description="Andelen handlingar som innehåller ordet 'asbest'"
               numerator={keywordMatches.asbest}
               denominator={totalDocuments}

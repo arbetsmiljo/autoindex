@@ -21,16 +21,18 @@ type DateRangeBarChartProps = {
   title: string;
   description: string;
   data: { date: string; value: number }[];
+  valueLabel: string;
 };
 
 export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
   title,
   description,
   data,
+  valueLabel,
 }) => {
   const chartConfig = {
     value: {
-      label: "Handlingar",
+      label: valueLabel,
       color: "black",
     },
   } satisfies ChartConfig;
