@@ -11,7 +11,6 @@ import { Page } from "@arbetsmarknad/components/Page";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import sqlite3 from "sqlite3";
 import { DocumentsPerDayChart } from "@/components/DocumentsPerDayChart";
-import { PercentagePieChart } from "@/components/PercentagePieChart";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
