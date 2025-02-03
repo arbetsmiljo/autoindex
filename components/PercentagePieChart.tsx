@@ -20,6 +20,7 @@ import {
 
 type PercentagePieChartProps = {
   title: string;
+  href?: string;
   description: string;
   numerator: number;
   denominator: number;
@@ -31,6 +32,7 @@ type PercentagePieChartProps = {
 
 export const PercentagePieChart: FC<PercentagePieChartProps> = ({
   title,
+  href,
   description,
   numerator,
   denominator,
@@ -58,7 +60,15 @@ export const PercentagePieChart: FC<PercentagePieChartProps> = ({
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>
+          {href ? (
+            <a className="text-blue-600 underline" href={href}>
+              {title}
+            </a>
+          ) : (
+            title
+          )}
+        </CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
