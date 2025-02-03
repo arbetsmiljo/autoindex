@@ -13,6 +13,12 @@ import sqlite3 from "sqlite3";
 import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 import { PercentagePieChart } from "@/components/PercentagePieChart";
 import { Metadata } from "next";
+import {
+  initKysely,
+  countTotalDocuments,
+  countDocumentsPerDay,
+  countCaseNameKeywordMatches,
+} from "@/lib/database";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -20,87 +26,18 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-async function countTotalDocuments(
-  database: sqlite3.Database,
-): Promise<number> {
-  return new Promise((resolve, reject) => {
-    database.get(
-      `SELECT COUNT(*) as documentCount FROM documents`,
-      (error: Error, row: { documentCount: string }) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(parseInt(row.documentCount));
-        }
-      },
-    );
-  });
-}
-
-async function countDocumentsPerDay(
-  database: sqlite3.Database,
-): Promise<{ date: string; value: number }[]> {
-  return new Promise((resolve, reject) => {
-    database.all(
-      `SELECT documentDate, COUNT(*) as value FROM documents GROUP BY documentDate ORDER BY documentDate`,
-      (error: Error, rows: { documentDate: string; value: string }[]) => {
-        if (error) {
-          reject(error);
-        } else {
-          const output: { date: string; value: number }[] = [];
-          rows.forEach((row) => {
-            output.push({
-              date: row.documentDate,
-              value: parseInt(row.value),
-            });
-          });
-          resolve(output);
-        }
-      },
-    );
-  });
-}
-
-async function countCaseNameKeywordMatches(
-  database: sqlite3.Database,
-  keywords: string[],
-): Promise<Record<string, number>> {
-  return new Promise((resolve, reject) => {
-    const conditions = keywords
-      .map(
-        (keyword) =>
-          `SUM(CASE WHEN caseName LIKE '%${keyword}%' THEN 1 ELSE 0 END) AS "${keyword}"`,
-      )
-      .join(", ");
-
-    const query = `SELECT ${conditions} FROM documents;`;
-
-    database.get(query, (error: Error, rows: Record<string, string>) => {
-      if (error) {
-        reject(error);
-      } else {
-        const result: Record<string, number> = {};
-        for (const key in rows) {
-          result[key] = parseInt(rows[key]) || 0;
-        }
-        resolve(result);
-      }
-    });
-  });
-}
-
 export default async function Home() {
   const directoryPath = process.env.SOURCE_DIRECTORY_PATH;
   const databasePath = `${directoryPath}/db.sqlite`;
-  const database = new sqlite3.Database(databasePath);
+  const db = initKysely(databasePath);
+  const sqlite = new sqlite3.Database(databasePath);
 
-  const totalDocuments = await countTotalDocuments(database);
-  const documentsPerDay = await countDocumentsPerDay(database);
-  const keywordMatches = await countCaseNameKeywordMatches(database, [
+  const totalDocuments = await countTotalDocuments(db);
+  const documentsPerDay = await countDocumentsPerDay(db);
+  const keywordMatches = await countCaseNameKeywordMatches(sqlite, [
     "asbest",
     "inspektion",
   ]);
-  console.log(keywordMatches);
 
   return (
     <Page>

@@ -9,9 +9,9 @@ import { Container } from "@arbetsmarknad/components/Container";
 import { HeaderMenu } from "@arbetsmarknad/components/HeaderMenu";
 import { Page } from "@arbetsmarknad/components/Page";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
-import sqlite3 from "sqlite3";
 import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 import { Metadata } from "next";
+import { initKysely, countInspectionCasesPerDay } from "@/lib/database";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -19,36 +19,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-async function countCasesPerDay(
-  database: sqlite3.Database,
-): Promise<{ date: string; value: number }[]> {
-  return new Promise((resolve, reject) => {
-    database.all(
-      `SELECT documentDate, COUNT(*) as value FROM documents WHERE caseName LIKE '%inspektion%' AND documentId LIKE '%-1' GROUP BY documentDate ORDER BY documentDate`,
-      (error: Error, rows: { documentDate: string; value: string }[]) => {
-        if (error) {
-          reject(error);
-        } else {
-          const output: { date: string; value: number }[] = [];
-          rows.forEach((row) => {
-            output.push({
-              date: row.documentDate,
-              value: parseInt(row.value),
-            });
-          });
-          resolve(output);
-        }
-      },
-    );
-  });
-}
-
 export default async function Inspections() {
   const directoryPath = process.env.SOURCE_DIRECTORY_PATH;
   const databasePath = `${directoryPath}/db.sqlite`;
-  const database = new sqlite3.Database(databasePath);
-
-  const casesPerDay = await countCasesPerDay(database);
+  const db = initKysely(databasePath);
+  const inspectionCasesPerDay = await countInspectionCasesPerDay(db);
 
   return (
     <Page>
@@ -93,7 +68,7 @@ export default async function Inspections() {
           <DateRangeBarChart
             title="Ärenden per dag"
             description="Antal nya ärenden som innehåller ordet 'inspektion' per dag"
-            data={casesPerDay}
+            data={inspectionCasesPerDay}
             valueLabel="Ärenden"
           />
         </Container>
