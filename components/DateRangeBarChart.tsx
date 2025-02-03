@@ -17,36 +17,40 @@ import {
   ChartTooltipContent,
 } from "@arbetsmarknad/components/Chart";
 
-const chartConfig = {
-  documentCount: {
-    label: "Handlingar",
-    color: "black",
-  },
-} satisfies ChartConfig;
-
-type DocumentsPerDayChartProps = {
-  totalDocuments: number;
-  documentsPerDay: { date: string; documentCount: number }[];
+type DateRangeBarChartProps = {
+  title: string;
+  description: string;
+  data: { date: string; value: number }[];
 };
 
-export const DocumentsPerDayChart: FC<DocumentsPerDayChartProps> = ({
-  totalDocuments,
-  documentsPerDay,
+export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
+  title,
+  description,
+  data,
 }) => {
+  const chartConfig = {
+    value: {
+      label: "Handlingar",
+      color: "black",
+    },
+  } satisfies ChartConfig;
+
+  const total = data.reduce((acc, { value }) => {
+    return acc + value;
+  }, 0);
+
   return (
     <Card className="w-full">
       <CardHeader className="flex flex-row items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-          <CardTitle>Handlingar per dag</CardTitle>
-          <CardDescription>
-            Visar antalet handlingar per dag genom året.
-          </CardDescription>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
         </div>
         <div className="flex">
           <div className="relative z-30 flex flex-1 flex-col justify-center gap-1 px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6">
             <span className="text-xs text-muted-foreground">Totalt</span>
             <span className="text-lg font-bold leading-none sm:text-3xl">
-              {totalDocuments}
+              {total}
             </span>
           </div>
         </div>
@@ -58,7 +62,7 @@ export const DocumentsPerDayChart: FC<DocumentsPerDayChartProps> = ({
         >
           <BarChart
             accessibilityLayer
-            data={documentsPerDay}
+            data={data}
             margin={{
               left: 12,
               right: 12,
@@ -83,7 +87,7 @@ export const DocumentsPerDayChart: FC<DocumentsPerDayChartProps> = ({
               content={
                 <ChartTooltipContent
                   className="w-[150px] bg-white"
-                  nameKey="documentCount"
+                  nameKey="value"
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString("sv-SE", {
                       month: "short",
@@ -94,7 +98,7 @@ export const DocumentsPerDayChart: FC<DocumentsPerDayChartProps> = ({
                 />
               }
             />
-            <Bar dataKey="documentCount" fill="black" />
+            <Bar dataKey="value" fill="black" />
           </BarChart>
         </ChartContainer>
       </CardContent>

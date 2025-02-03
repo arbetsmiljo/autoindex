@@ -10,7 +10,7 @@ import { HeaderMenu } from "@arbetsmarknad/components/HeaderMenu";
 import { Page } from "@arbetsmarknad/components/Page";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import sqlite3 from "sqlite3";
-import { DocumentsPerDayChart } from "@/components/DocumentsPerDayChart";
+import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 import { PercentagePieChart } from "@/components/PercentagePieChart";
 import { Metadata } from "next";
 
@@ -39,22 +39,19 @@ async function countTotalDocuments(
 
 async function countDocumentsPerDay(
   database: sqlite3.Database,
-): Promise<{ date: string; documentCount: number }[]> {
+): Promise<{ date: string; value: number }[]> {
   return new Promise((resolve, reject) => {
     database.all(
-      `SELECT documentDate, COUNT(*) as documentCount FROM documents GROUP BY documentDate ORDER BY documentDate`,
-      (
-        error: Error,
-        rows: { documentDate: string; documentCount: string }[],
-      ) => {
+      `SELECT documentDate, COUNT(*) as value FROM documents GROUP BY documentDate ORDER BY documentDate`,
+      (error: Error, rows: { documentDate: string; value: string }[]) => {
         if (error) {
           reject(error);
         } else {
-          const output: { date: string; documentCount: number }[] = [];
+          const output: { date: string; value: number }[] = [];
           rows.forEach((row) => {
             output.push({
               date: row.documentDate,
-              documentCount: parseInt(row.documentCount),
+              value: parseInt(row.value),
             });
           });
           resolve(output);
@@ -137,9 +134,11 @@ export default async function Home() {
           <TopLevelHeading
             text={`Arbetsmiljö ${process.env.NEXT_PUBLIC_YEAR}`}
           />
-          <DocumentsPerDayChart
-            totalDocuments={totalDocuments}
-            documentsPerDay={documentsPerDay}
+
+          <DateRangeBarChart
+            title="Handlingar per dag"
+            description="Visar antalet handlingar per dag genom året."
+            data={documentsPerDay}
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
