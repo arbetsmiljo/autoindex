@@ -15,7 +15,7 @@ import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `Arbetsmiljöinspektioner ${process.env.NEXT_PUBLIC_YEAR}`,
+    title: `Asbest ${process.env.NEXT_PUBLIC_YEAR}`,
   };
 }
 
@@ -24,8 +24,11 @@ async function countCasesPerDay(
 ): Promise<{ date: string; value: number }[]> {
   return new Promise((resolve, reject) => {
     database.all(
-      `SELECT documentDate, COUNT(*) as value FROM documents WHERE caseName LIKE '%inspektion%' AND documentId LIKE '%-1' GROUP BY documentDate ORDER BY documentDate`,
-      (error: Error, rows: { documentDate: string; value: string }[]) => {
+      `SELECT documentDate, COUNT(*) as documentCount FROM documents WHERE caseName LIKE '%asbest%' AND documentId LIKE '%-1' GROUP BY documentDate ORDER BY documentDate`,
+      (
+        error: Error,
+        rows: { documentDate: string; documentCount: string }[],
+      ) => {
         if (error) {
           reject(error);
         } else {
@@ -33,7 +36,7 @@ async function countCasesPerDay(
           rows.forEach((row) => {
             output.push({
               date: row.documentDate,
-              value: parseInt(row.value),
+              value: parseInt(row.documentCount),
             });
           });
           resolve(output);
@@ -43,11 +46,10 @@ async function countCasesPerDay(
   });
 }
 
-export default async function Inspections() {
+export default async function Asbestos() {
   const directoryPath = process.env.SOURCE_DIRECTORY_PATH;
   const databasePath = `${directoryPath}/db.sqlite`;
   const database = new sqlite3.Database(databasePath);
-
   const casesPerDay = await countCasesPerDay(database);
 
   return (
@@ -76,10 +78,8 @@ export default async function Inspections() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink
-                href={`/${process.env.NEXT_PUBLIC_YEAR}/inspektioner`}
-              >
-                Inspektioner
+              <BreadcrumbLink href={`/${process.env.NEXT_PUBLIC_YEAR}/asbest`}>
+                Asbest
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -87,12 +87,10 @@ export default async function Inspections() {
       </Breadcrumb>
       <main className="flex flex-col items-center w-full py-4">
         <Container className="flex flex-col items-start space-y-4">
-          <TopLevelHeading
-            text={`Arbetsmiljöinspektioner ${process.env.NEXT_PUBLIC_YEAR}`}
-          />
+          <TopLevelHeading text={`Asbest ${process.env.NEXT_PUBLIC_YEAR}`} />
           <DateRangeBarChart
             title="Ärenden per dag"
-            description="Antal nya ärenden som innehåller ordet 'inspektion' per dag"
+            description="Antal nya ärenden som innehåller ordet 'asbest' per dag"
             data={casesPerDay}
             valueLabel="Ärenden"
           />
