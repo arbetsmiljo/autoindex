@@ -126,7 +126,7 @@ export default async function Home() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink href={`/${process.env.NEXT_PUBLIC_YEAR}`}>
-                {process.env.NEXT_PUBLIC_YEAR}`
+                {process.env.NEXT_PUBLIC_YEAR}
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -145,6 +145,7 @@ export default async function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
             <PercentagePieChart
               title="Inspektionshandlingar"
+              href={`/${process.env.NEXT_PUBLIC_YEAR}/inspektioner`}
               description="Andelen handlingar som innehåller ordet 'inspektion'"
               numerator={keywordMatches.inspektion}
               denominator={totalDocuments}
