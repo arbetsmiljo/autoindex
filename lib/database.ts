@@ -91,6 +91,40 @@ export async function countDocumentsPerDay(
   }));
 }
 
+export async function countDocumentsPerDayForCounty(
+  db: Kysely<DiariumDatabase>,
+  countyId: string,
+): Promise<{ date: string; value: number }[]> {
+  const rows = await db
+    .selectFrom("documents")
+    .select(["documentDate", db.fn.count("documentId").as("value")])
+    .where("countyId", "=", countyId)
+    .groupBy("documentDate")
+    .orderBy("documentDate")
+    .execute();
+  return rows.map((row) => ({
+    date: row.documentDate,
+    value: Number(row.value),
+  }));
+}
+
+export async function countDocumentsPerDayForMunicipality(
+  db: Kysely<DiariumDatabase>,
+  municipalityId: string,
+): Promise<{ date: string; value: number }[]> {
+  const rows = await db
+    .selectFrom("documents")
+    .select(["documentDate", db.fn.count("documentId").as("value")])
+    .where("municipalityId", "=", municipalityId)
+    .groupBy("documentDate")
+    .orderBy("documentDate")
+    .execute();
+  return rows.map((row) => ({
+    date: row.documentDate,
+    value: Number(row.value),
+  }));
+}
+
 export async function countCaseNameKeywordMatches(
   database: sqlite3.Database,
   keywords: string[],
@@ -117,4 +151,61 @@ export async function countCaseNameKeywordMatches(
       }
     });
   });
+}
+
+type County = {
+  countyId: string;
+  countyName: string;
+};
+
+export async function selectDistinctCounties(
+  db: Kysely<DiariumDatabase>,
+): Promise<County[]> {
+  const result = await db
+    .selectFrom("documents")
+    .select(["countyId", "countyName"])
+    .where("countyId", "is not", null)
+    .where("countyName", "is not", null)
+    .orderBy("countyName")
+    .distinct()
+    .execute();
+  const counties = result.map((row) => ({
+    countyId: row.countyId!,
+    countyName: row.countyName!,
+  }));
+  return counties;
+}
+
+type Municipality = {
+  municipalityId: string;
+  municipalityName: string;
+};
+
+export async function selectDistinctCountiesAndMunicipalities(
+  db: Kysely<DiariumDatabase>,
+): Promise<[County, Municipality][]> {
+  const result = await db
+    .selectFrom("documents")
+    .select(["countyId", "countyName", "municipalityId", "municipalityName"])
+    .where("countyId", "is not", null)
+    .where("countyName", "is not", null)
+    .where("municipalityId", "is not", null)
+    .where("municipalityName", "is not", null)
+    .orderBy("countyName")
+    .distinct()
+    .execute();
+  const output = result.map(
+    (row) =>
+      [
+        {
+          countyId: row.countyId!,
+          countyName: row.countyName!,
+        },
+        {
+          municipalityId: row.municipalityId!,
+          municipalityName: row.municipalityName!,
+        },
+      ] as [County, Municipality],
+  );
+  return output;
 }
