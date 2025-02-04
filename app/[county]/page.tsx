@@ -6,6 +6,12 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@arbetsmarknad/components/Breadcrumb";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@arbetsmarknad/components/Card";
 import { Container } from "@arbetsmarknad/components/Container";
 import { HeaderMenu } from "@arbetsmarknad/components/HeaderMenu";
 import { Page } from "@arbetsmarknad/components/Page";
@@ -15,8 +21,12 @@ import {
   initKysely,
   selectDistinctCounties,
   countDocumentsPerDay,
+  selectDistinctCountiesAndMunicipalities,
+  countCaseNameKeywordMatches,
+  countTotalDocuments,
 } from "@/lib/database";
 import { slugify } from "@/lib/slugify";
+import { PercentagePieChart } from "@/components/PercentagePieChart";
 
 type CountyParams = {
   county: string;
@@ -46,6 +56,12 @@ export default async function County(props: CountyProps) {
   const documentsPerDay = await countDocumentsPerDay(db, (q) =>
     q.where("countyId", "=", county.countyId),
   );
+
+  const countiesAndMunicipalities =
+    await selectDistinctCountiesAndMunicipalities(db);
+  const municipalities = countiesAndMunicipalities
+    .filter(([c]) => c.countyId === county.countyId)
+    .map(([, m]) => m);
 
   return (
     <Page>
@@ -94,6 +110,28 @@ export default async function County(props: CountyProps) {
             data={documentsPerDay}
             valueLabel="Handlingar"
           />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+            <Card className="flex flex-col">
+              <CardHeader className="items-center pb-0">
+                <CardTitle>Kommuner</CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1 pb-4">
+                <ul className="flex flex-col gap-2">
+                  {municipalities.map((municipality) => (
+                    <li key={municipality.municipalityId}>
+                      <a
+                        className="underline text-blue-600"
+                        href={`/${process.env.NEXT_PUBLIC_YEAR}/${slugify(county.countyName)}/${slugify(municipality.municipalityName)}`}
+                      >
+                        {_.capitalize(municipality.municipalityName)}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
         </Container>
       </main>
     </Page>
