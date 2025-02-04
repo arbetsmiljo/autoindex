@@ -22,11 +22,8 @@ import {
   selectDistinctCounties,
   countDocumentsPerDay,
   selectDistinctCountiesAndMunicipalities,
-  countCaseNameKeywordMatches,
-  countTotalDocuments,
 } from "@/lib/database";
 import { slugify } from "@/lib/slugify";
-import { PercentagePieChart } from "@/components/PercentagePieChart";
 
 type CountyParams = {
   county: string;
