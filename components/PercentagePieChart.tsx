@@ -58,7 +58,7 @@ export const PercentagePieChart: FC<PercentagePieChartProps> = ({
   const percent = Math.round((numerator / denominator) * 100);
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col border-gray-300">
       <CardHeader className="items-center pb-0">
         <CardTitle>
           {href ? (

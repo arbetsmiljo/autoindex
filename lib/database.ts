@@ -168,3 +168,37 @@ export async function selectDistinctCountiesAndMunicipalities(
   );
   return output;
 }
+
+export async function countDocumentsByCounty(
+  db: Kysely<DiariumDatabase>,
+): Promise<{ countyName: string; documentCount: number }[]> {
+  const result = await db
+    .selectFrom("documents")
+    .select(["countyName", db.fn.count("documentId").as("documentCount")])
+    .where("countyName", "is not", null)
+    .groupBy("countyName")
+    .orderBy("documentCount", "desc")
+    .execute();
+  return result.map((row) => ({
+    countyName: row.countyName!,
+    documentCount: Number(row.documentCount),
+  }));
+}
+
+export async function countDocumentsByMunicipality(
+  db: Kysely<DiariumDatabase>,
+  countyName: string,
+): Promise<{ municipalityName: string; documentCount: number }[]> {
+  const result = await db
+    .selectFrom("documents")
+    .select(["municipalityName", db.fn.count("documentId").as("documentCount")])
+    .where("municipalityName", "is not", null)
+    .where("countyName", "=", countyName)
+    .groupBy("municipalityName")
+    .orderBy("documentCount", "desc")
+    .execute();
+  return result.map((row) => ({
+    municipalityName: row.municipalityName!,
+    documentCount: Number(row.documentCount),
+  }));
+}
