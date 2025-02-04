@@ -1,5 +1,5 @@
 import Database from "better-sqlite3";
-import { Generated, Kysely, SqliteDialect } from "kysely";
+import { Generated, Kysely, SelectQueryBuilder, SqliteDialect } from "kysely";
 import sqlite3 from "sqlite3";
 
 export type DiariumDocument = {
@@ -78,44 +78,22 @@ export async function countTotalDocuments(
 
 export async function countDocumentsPerDay(
   db: Kysely<DiariumDatabase>,
+  where?: (
+    q: SelectQueryBuilder<
+      DiariumDatabase,
+      "documents",
+      {
+        documentDate: string;
+        value: string | number | bigint;
+      }
+    >,
+  ) => void,
 ): Promise<{ date: string; value: number }[]> {
-  const rows = await db
+  const query = db
     .selectFrom("documents")
-    .select(["documentDate", db.fn.count("documentId").as("value")])
-    .groupBy("documentDate")
-    .orderBy("documentDate")
-    .execute();
-  return rows.map((row) => ({
-    date: row.documentDate,
-    value: Number(row.value),
-  }));
-}
-
-export async function countDocumentsPerDayForCounty(
-  db: Kysely<DiariumDatabase>,
-  countyId: string,
-): Promise<{ date: string; value: number }[]> {
-  const rows = await db
-    .selectFrom("documents")
-    .select(["documentDate", db.fn.count("documentId").as("value")])
-    .where("countyId", "=", countyId)
-    .groupBy("documentDate")
-    .orderBy("documentDate")
-    .execute();
-  return rows.map((row) => ({
-    date: row.documentDate,
-    value: Number(row.value),
-  }));
-}
-
-export async function countDocumentsPerDayForMunicipality(
-  db: Kysely<DiariumDatabase>,
-  municipalityId: string,
-): Promise<{ date: string; value: number }[]> {
-  const rows = await db
-    .selectFrom("documents")
-    .select(["documentDate", db.fn.count("documentId").as("value")])
-    .where("municipalityId", "=", municipalityId)
+    .select(["documentDate", db.fn.count("documentId").as("value")]);
+  if (where) where(query);
+  const rows = await query
     .groupBy("documentDate")
     .orderBy("documentDate")
     .execute();

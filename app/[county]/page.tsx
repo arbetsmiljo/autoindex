@@ -14,7 +14,7 @@ import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 import {
   initKysely,
   selectDistinctCounties,
-  countDocumentsPerDayForCounty,
+  countDocumentsPerDay,
 } from "@/lib/database";
 import { slugify } from "@/lib/slugify";
 
@@ -43,9 +43,8 @@ export default async function County(props: CountyProps) {
   const county = counties.find(
     (county) => slugify(county.countyName) === params.county,
   )!;
-  const documentsPerDay = await countDocumentsPerDayForCounty(
-    db,
-    county.countyId,
+  const documentsPerDay = await countDocumentsPerDay(db, (q) =>
+    q.where("countyId", "=", county.countyId),
   );
 
   return (
