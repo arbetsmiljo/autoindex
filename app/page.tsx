@@ -1,3 +1,4 @@
+import _ from "lodash";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -5,6 +6,12 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@arbetsmarknad/components/Breadcrumb";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@arbetsmarknad/components/Card";
 import { Container } from "@arbetsmarknad/components/Container";
 import { HeaderMenu } from "@arbetsmarknad/components/HeaderMenu";
 import { Page } from "@arbetsmarknad/components/Page";
@@ -18,7 +25,9 @@ import {
   countTotalDocuments,
   countDocumentsPerDay,
   countCaseNameKeywordMatches,
+  selectDistinctCounties,
 } from "@/lib/database";
+import { slugify } from "@/lib/slugify";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -38,6 +47,7 @@ export default async function Home() {
     "asbest",
     "inspektion",
   ]);
+  const counties = await selectDistinctCounties(db);
 
   return (
     <Page>
@@ -113,6 +123,28 @@ export default async function Home() {
                 </>
               }
             />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+            <Card className="flex flex-col">
+              <CardHeader className="items-center pb-0">
+                <CardTitle>Län</CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1 pb-4">
+                <ul className="flex flex-col gap-2">
+                  {counties.map((county) => (
+                    <li key={county.countyId}>
+                      <a
+                        className="underline text-blue-600"
+                        href={`/${process.env.NEXT_PUBLIC_YEAR}/${slugify(county.countyName)}`}
+                      >
+                        {_.capitalize(county.countyName)}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </Container>
       </main>
