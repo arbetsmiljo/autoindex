@@ -35,8 +35,8 @@ export function initKysely(filename: string): Kysely<DiariumDatabase> {
 export async function countCasesPerDay(
   db: Kysely<DiariumDatabase>,
   where?: (
-    q: SelectQueryBuilder<DiariumDatabase, any, any>,
-  ) => SelectQueryBuilder<DiariumDatabase, any, any>,
+    q: SelectQueryBuilder<DiariumDatabase, any, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+  ) => SelectQueryBuilder<DiariumDatabase, any, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
 ): Promise<{ date: string; value: number }[]> {
   let query = db
     .selectFrom("documents")
@@ -64,8 +64,8 @@ export async function countTotalDocuments(
 export async function countDocumentsPerDay(
   db: Kysely<DiariumDatabase>,
   where?: (
-    q: SelectQueryBuilder<DiariumDatabase, any, any>,
-  ) => SelectQueryBuilder<DiariumDatabase, any, any>,
+    q: SelectQueryBuilder<DiariumDatabase, any, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+  ) => SelectQueryBuilder<DiariumDatabase, any, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
 ): Promise<{ date: string; value: number }[]> {
   let query = db
     .selectFrom("documents")
@@ -140,8 +140,8 @@ type Municipality = {
 export async function selectDistinctCountiesAndMunicipalities(
   db: Kysely<DiariumDatabase>,
   where?: (
-    q: SelectQueryBuilder<DiariumDatabase, any, any>,
-  ) => SelectQueryBuilder<DiariumDatabase, any, any>,
+    q: SelectQueryBuilder<DiariumDatabase, any, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+  ) => SelectQueryBuilder<DiariumDatabase, any, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
 ): Promise<[County, Municipality][]> {
   let query = db
     .selectFrom("documents")
