@@ -9,6 +9,7 @@ import {
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@arbetsmarknad/components/Card";
@@ -19,13 +20,21 @@ import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import sqlite3 from "sqlite3";
 import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 import { PercentagePieChart } from "@/components/PercentagePieChart";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@arbetsmarknad/components/Table";
 import { Metadata } from "next";
 import {
   initKysely,
   countTotalDocuments,
   countDocumentsPerDay,
   countCaseNameKeywordMatches,
-  selectDistinctCounties,
+  countDocumentsByCounty,
 } from "@/lib/database";
 import { slugify } from "@/lib/slugify";
 
@@ -47,7 +56,7 @@ export default async function Home() {
     "asbest",
     "inspektion",
   ]);
-  const counties = await selectDistinctCounties(db);
+  const documentsByCounty = await countDocumentsByCounty(db);
 
   return (
     <Page>
@@ -126,23 +135,35 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-            <Card className="flex flex-col">
+            <Card className="flex flex-col gap-y-4 border-gray-300">
               <CardHeader className="items-center pb-0">
-                <CardTitle>Län</CardTitle>
+                <CardTitle>Geografisk fördelning</CardTitle>
+                <CardDescription>Antal handlingar per län</CardDescription>
               </CardHeader>
               <CardContent className="flex-1 pb-4">
-                <ul className="flex flex-col gap-2">
-                  {counties.map((county) => (
-                    <li key={county.countyId}>
-                      <a
-                        className="underline text-blue-600"
-                        href={`/${process.env.NEXT_PUBLIC_YEAR}/${slugify(county.countyName)}`}
-                      >
-                        {_.capitalize(county.countyName)}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-gray-200">
+                      <TableHead className="font-bold">Län</TableHead>
+                      <TableHead className="font-bold">Handlingar</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {documentsByCounty.map(({ countyName, documentCount }) => (
+                      <TableRow key={countyName} className="border-gray-200">
+                        <TableCell className="font-medium">
+                          <a
+                            className="underline text-blue-600"
+                            href={`/${process.env.NEXT_PUBLIC_YEAR}/${slugify(countyName)}`}
+                          >
+                            {_.capitalize(countyName)}
+                          </a>
+                        </TableCell>
+                        <TableCell>{documentCount}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </CardContent>
             </Card>
           </div>

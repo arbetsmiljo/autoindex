@@ -40,8 +40,8 @@ importers:
         version: 5.1.7
     devDependencies:
       '@arbetsmarknad/components':
-        specifier: ^0.0.21
-        version: 0.0.21(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(recharts@2.15.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.3)(typescript@5.7.3)
+        specifier: ^0.0.22
+        version: 0.0.22(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(recharts@2.15.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.3)(typescript@5.7.3)
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.2.0
@@ -88,8 +88,8 @@ packages:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
 
-  '@arbetsmarknad/components@0.0.21':
-    resolution: {integrity: sha512-XglDDgF7HmqHC0iDVo4V9VpzvRirUSt0wQcxzc0H3mveZIASZTuhjkM8OaDcEIzSfunYfv0dUgZZgR02psxkOA==}
+  '@arbetsmarknad/components@0.0.22':
+    resolution: {integrity: sha512-LNqTUIiRJGAB54STRocttXYKL32iEqQyXLoWUMahcy1bI6qvyp4mehd28cHcnYbUYPbnLA+8cMAzepW2LcbD6g==}
     peerDependencies:
       react: ^19.0.0
       react-dom: ^19.0.0
@@ -2223,7 +2223,7 @@ snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
 
-  '@arbetsmarknad/components@0.0.21(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(recharts@2.15.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.3)(typescript@5.7.3)':
+  '@arbetsmarknad/components@0.0.22(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(recharts@2.15.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.3)(typescript@5.7.3)':
     dependencies:
       '@radix-ui/react-slot': 1.1.1(@types/react@19.0.8)(react@19.0.0)
       class-variance-authority: 0.7.1
