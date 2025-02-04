@@ -11,7 +11,7 @@ import { Page } from "@arbetsmarknad/components/Page";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 import { Metadata } from "next";
-import { initKysely, countAsbestosCasesPerDay } from "@/lib/database";
+import { initKysely, countCasesPerDay } from "@/lib/database";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -23,7 +23,9 @@ export default async function Asbestos() {
   const directoryPath = process.env.SOURCE_DIRECTORY_PATH;
   const databasePath = `${directoryPath}/db.sqlite`;
   const db = initKysely(databasePath);
-  const asbestosCasesPerDay = await countAsbestosCasesPerDay(db);
+  const asbestosCasesPerDay = await countCasesPerDay(db, (q) =>
+    q.where("caseName", "like", "%asbest%").where("documentId", "like", "%-1"),
+  );
 
   return (
     <Page>

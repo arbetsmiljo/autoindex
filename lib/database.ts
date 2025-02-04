@@ -32,35 +32,20 @@ export function initKysely(filename: string): Kysely<DiariumDatabase> {
   return db;
 }
 
-export async function countAsbestosCasesPerDay(
+export async function countCasesPerDay(
   db: Kysely<DiariumDatabase>,
+  where?: (
+    q: SelectQueryBuilder<DiariumDatabase, any, any>,
+  ) => SelectQueryBuilder<DiariumDatabase, any, any>,
 ): Promise<{ date: string; value: number }[]> {
-  const rows = await db
+  let query = db
     .selectFrom("documents")
     .select(["documentDate", db.fn.count("documentId").as("documentCount")])
-    .where("caseName", "like", "%asbest%")
-    .where("documentId", "like", "%-1")
     .groupBy("documentDate")
-    .orderBy("documentDate")
-    .execute();
-  return rows.map((row) => ({
-    date: row.documentDate,
-    value: Number(row.documentCount),
-  }));
-}
-
-export async function countInspectionCasesPerDay(
-  db: Kysely<DiariumDatabase>,
-): Promise<{ date: string; value: number }[]> {
-  const rows = await db
-    .selectFrom("documents")
-    .select(["documentDate", db.fn.count("documentId").as("documentCount")])
-    .where("caseName", "like", "%inspektion%")
-    .where("documentId", "like", "%-1")
-    .groupBy("documentDate")
-    .orderBy("documentDate")
-    .execute();
-  return rows.map((row) => ({
+    .orderBy("documentDate");
+  if (where) query = where(query);
+  const result = await query.execute();
+  return result.map((row) => ({
     date: row.documentDate,
     value: Number(row.documentCount),
   }));
@@ -79,20 +64,13 @@ export async function countTotalDocuments(
 export async function countDocumentsPerDay(
   db: Kysely<DiariumDatabase>,
   where?: (
-    q: SelectQueryBuilder<
-      DiariumDatabase,
-      "documents",
-      {
-        documentDate: string;
-        value: string | number | bigint;
-      }
-    >,
-  ) => void,
+    q: SelectQueryBuilder<DiariumDatabase, any, any>,
+  ) => SelectQueryBuilder<DiariumDatabase, any, any>,
 ): Promise<{ date: string; value: number }[]> {
-  const query = db
+  let query = db
     .selectFrom("documents")
     .select(["documentDate", db.fn.count("documentId").as("value")]);
-  if (where) where(query);
+  if (where) query = where(query);
   const rows = await query
     .groupBy("documentDate")
     .orderBy("documentDate")
@@ -161,17 +139,20 @@ type Municipality = {
 
 export async function selectDistinctCountiesAndMunicipalities(
   db: Kysely<DiariumDatabase>,
+  where?: (
+    q: SelectQueryBuilder<DiariumDatabase, any, any>,
+  ) => SelectQueryBuilder<DiariumDatabase, any, any>,
 ): Promise<[County, Municipality][]> {
-  const result = await db
+  let query = db
     .selectFrom("documents")
     .select(["countyId", "countyName", "municipalityId", "municipalityName"])
     .where("countyId", "is not", null)
     .where("countyName", "is not", null)
     .where("municipalityId", "is not", null)
-    .where("municipalityName", "is not", null)
-    .orderBy("countyName")
-    .distinct()
-    .execute();
+    .where("municipalityName", "is not", null);
+  if (where) query = where(query);
+  query = query.orderBy("countyName").distinct();
+  const result = await query.execute();
   const output = result.map(
     (row) =>
       [
