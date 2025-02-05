@@ -137,7 +137,14 @@ export default async function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
             <Card className="flex flex-col gap-y-4 border-gray-300">
               <CardHeader className="items-center pb-0">
-                <CardTitle>Geografisk fördelning</CardTitle>
+                <CardTitle>
+                  <a
+                    href={`/${process.env.NEXT_PUBLIC_YEAR}/inspektioner`}
+                    className="text-blue-600 underline"
+                  >
+                    Geografisk fördelning
+                  </a>
+                </CardTitle>
                 <CardDescription>Antal handlingar per län</CardDescription>
               </CardHeader>
               <CardContent className="flex-1 pb-4">
@@ -149,19 +156,21 @@ export default async function Home() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {documentsByCounty.map(({ countyName, documentCount }) => (
-                      <TableRow key={countyName} className="border-gray-200">
-                        <TableCell className="font-medium">
-                          <a
-                            className="underline text-blue-600"
-                            href={`/${process.env.NEXT_PUBLIC_YEAR}/${slugify(countyName)}`}
-                          >
-                            {_.capitalize(countyName)}
-                          </a>
-                        </TableCell>
-                        <TableCell>{documentCount}</TableCell>
-                      </TableRow>
-                    ))}
+                    {documentsByCounty
+                      .slice(0, 5)
+                      .map(({ countyName, documentCount }) => (
+                        <TableRow key={countyName} className="border-gray-200">
+                          <TableCell className="font-medium">
+                            <a
+                              className="underline text-blue-600"
+                              href={`/${process.env.NEXT_PUBLIC_YEAR}/${slugify(countyName)}`}
+                            >
+                              {_.capitalize(countyName)}
+                            </a>
+                          </TableCell>
+                          <TableCell>{documentCount}</TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               </CardContent>
