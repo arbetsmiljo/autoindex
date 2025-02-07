@@ -1,5 +1,5 @@
-@import "@arbetsmarknad/components/dist.css";
 @import "tailwindcss";
+@source "../node_modules/@arbetsmarknad/components";
 
 :root {
   --background: #ffffff;
