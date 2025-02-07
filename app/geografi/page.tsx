@@ -1,15 +1,8 @@
 import { Breadcrumbs } from "@arbetsmarknad/components/Breadcrumb";
 import { Container } from "@arbetsmarknad/components/Container";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@arbetsmarknad/components/Card";
+import { Card, CardContent } from "@arbetsmarknad/components/Card";
 import { Main } from "@arbetsmarknad/components/Main";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
-import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 import { Metadata } from "next";
 import {
   Table,
@@ -36,11 +29,6 @@ export default async function Inspections() {
   const directoryPath = process.env.SOURCE_DIRECTORY_PATH;
   const databasePath = `${directoryPath}/db.sqlite`;
   const db = initKysely(databasePath);
-  const inspectionCasesPerDay = await countCasesPerDay(db, (q) =>
-    q
-      .where("caseName", "like", "%inspektion%")
-      .where("documentId", "like", "%-1"),
-  );
   const documentsByCounty = await countDocumentsByCounty(db);
 
   return (
