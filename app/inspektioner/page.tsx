@@ -1,14 +1,5 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@arbetsmarknad/components/Breadcrumb";
+import { Breadcrumbs } from "@arbetsmarknad/components/Breadcrumb";
 import { Container } from "@arbetsmarknad/components/Container";
-import { HeaderMenu } from "@arbetsmarknad/components/HeaderMenu";
-import { Page } from "@arbetsmarknad/components/Page";
-import { Footer } from "@arbetsmarknad/components/Footer";
 import { Main } from "@arbetsmarknad/components/Main";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import { DateRangeBarChart } from "@/components/DateRangeBarChart";
@@ -32,38 +23,15 @@ export default async function Inspections() {
   );
 
   return (
-    <Page>
-      <HeaderMenu
-        href="https://arbetsmiljo.github.io"
-        text="arbetsmiljo.github.io"
-      />
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="https://arbetsmarknad.github.io/">
-              Arbetsmarknad
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Arbetsmiljö</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href={`/${process.env.NEXT_PUBLIC_YEAR}`}>
-              {process.env.NEXT_PUBLIC_YEAR}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink
-              href={`/${process.env.NEXT_PUBLIC_YEAR}/inspektioner`}
-            >
-              Inspektioner
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <>
+      <Breadcrumbs>
+        {{
+          "https://arbetsmarknad.github.io/": "Arbetsmarknad",
+          "/": "Arbetsmiljö",
+          [`/${process.env.NEXT_PUBLIC_YEAR}`]: `${process.env.NEXT_PUBLIC_YEAR}`,
+          [`/${process.env.NEXT_PUBLIC_YEAR}/inspektioner`]: "Inspektioner",
+        }}
+      </Breadcrumbs>
       <Main>
         <Container className="flex flex-col items-start space-y-4">
           <TopLevelHeading
@@ -77,13 +45,6 @@ export default async function Inspections() {
           />
         </Container>
       </Main>
-      <Footer
-        sourceCode={[
-          `arbetsmiljo/${process.env.NEXT_PUBLIC_YEAR}`,
-          "arbetsmiljo/autoindex",
-          "arbetsmarknad/components",
-        ]}
-      />
-    </Page>
+    </>
   );
 }
