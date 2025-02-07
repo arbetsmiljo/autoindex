@@ -14,6 +14,7 @@ import {
 } from "@arbetsmarknad/components/Table";
 import { initKysely, countDocumentsByCounty } from "@/lib/database";
 import { slugify } from "@/lib/slugify";
+import _ from "lodash";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
