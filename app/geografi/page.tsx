@@ -12,11 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@arbetsmarknad/components/Table";
-import {
-  initKysely,
-  countCasesPerDay,
-  countDocumentsByCounty,
-} from "@/lib/database";
+import { initKysely, countDocumentsByCounty } from "@/lib/database";
 import { slugify } from "@/lib/slugify";
 
 export async function generateMetadata(): Promise<Metadata> {
