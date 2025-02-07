@@ -1,10 +1,30 @@
 import { Breadcrumbs } from "@arbetsmarknad/components/Breadcrumb";
 import { Container } from "@arbetsmarknad/components/Container";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@arbetsmarknad/components/Card";
 import { Main } from "@arbetsmarknad/components/Main";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 import { Metadata } from "next";
-import { initKysely, countCasesPerDay } from "@/lib/database";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@arbetsmarknad/components/Table";
+import {
+  initKysely,
+  countCasesPerDay,
+  countDocumentsByCounty,
+} from "@/lib/database";
+import { slugify } from "@/lib/slugify";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -21,6 +41,7 @@ export default async function Inspections() {
       .where("caseName", "like", "%inspektion%")
       .where("documentId", "like", "%-1"),
   );
+  const documentsByCounty = await countDocumentsByCounty(db);
 
   return (
     <>
@@ -35,14 +56,38 @@ export default async function Inspections() {
       <Main>
         <Container className="flex flex-col items-start space-y-4">
           <TopLevelHeading
-            text={`Arbetsmiljöinspektioner ${process.env.NEXT_PUBLIC_YEAR}`}
+            text={`Arbetsmiljöhandlingar ${process.env.NEXT_PUBLIC_YEAR}`}
+            subtext="Geografisk fördelning"
           />
-          <DateRangeBarChart
-            title="Ärenden per dag"
-            description="Antal nya ärenden som innehåller ordet 'inspektion' per dag"
-            data={inspectionCasesPerDay}
-            valueLabel="Ärenden"
-          />
+          <div className="grid grid-cols-1 gap-4 w-full">
+            <Card className="flex flex-col gap-y-4 border-gray-300">
+              <CardContent className="flex-1 pb-4">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-gray-200">
+                      <TableHead className="font-bold">Län</TableHead>
+                      <TableHead className="font-bold">Handlingar</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {documentsByCounty.map(({ countyName, documentCount }) => (
+                      <TableRow key={countyName} className="border-gray-200">
+                        <TableCell className="font-medium">
+                          <a
+                            className="underline text-blue-600"
+                            href={`/${process.env.NEXT_PUBLIC_YEAR}/${slugify(countyName)}`}
+                          >
+                            {_.capitalize(countyName)}
+                          </a>
+                        </TableCell>
+                        <TableCell>{documentCount}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </div>
         </Container>
       </Main>
     </>
