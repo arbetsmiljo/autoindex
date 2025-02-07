@@ -1,10 +1,23 @@
 import { Breadcrumbs } from "@arbetsmarknad/components/Breadcrumb";
+import { Card, CardContent } from "@arbetsmarknad/components/Card";
 import { Container } from "@arbetsmarknad/components/Container";
 import { Main } from "@arbetsmarknad/components/Main";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 import { Metadata } from "next";
-import { initKysely, countCasesPerDay } from "@/lib/database";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@arbetsmarknad/components/Table";
+import {
+  initKysely,
+  countCasesPerDay,
+  countDocumentsByInspectionType,
+} from "@/lib/database";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -21,6 +34,8 @@ export default async function Inspections() {
       .where("caseName", "like", "%inspektion%")
       .where("documentId", "like", "%-1"),
   );
+
+  const documentsPerInspectionType = await countDocumentsByInspectionType(db);
 
   return (
     <>
@@ -43,6 +58,38 @@ export default async function Inspections() {
             data={inspectionCasesPerDay}
             valueLabel="Ärenden"
           />
+
+          <div className="grid grid-cols-1 gap-4 w-full">
+            <Card className="flex flex-col gap-y-4 border-gray-300">
+              <CardContent className="flex-1 pb-4">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-gray-200">
+                      <TableHead className="font-bold">
+                        Inspektionskategori
+                      </TableHead>
+                      <TableHead className="font-bold">Handlingar</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {documentsPerInspectionType.map(
+                      ({ inspectionType, count }) => (
+                        <TableRow
+                          key={inspectionType}
+                          className="border-gray-200"
+                        >
+                          <TableCell className="font-medium">
+                            {inspectionType}
+                          </TableCell>
+                          <TableCell>{count}</TableCell>
+                        </TableRow>
+                      ),
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </div>
         </Container>
       </Main>
     </>

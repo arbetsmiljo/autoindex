@@ -202,3 +202,27 @@ export async function countDocumentsByMunicipality(
     documentCount: Number(row.documentCount),
   }));
 }
+
+import { sql } from "kysely";
+
+export async function countDocumentsByInspectionType(
+  db: Kysely<DiariumDatabase>,
+): Promise<{ inspectionType: string; count: number }[]> {
+  const result = await db
+    .selectFrom("documents")
+    .select([
+      sql<string>`TRIM(REPLACE(caseName, 'Inspektion inom', ''))`.as(
+        "inspectionType",
+      ),
+      db.fn.countAll().as("count"),
+    ])
+    .where("caseName", "like", "Inspektion inom%")
+    .groupBy("inspectionType")
+    .orderBy("count", "desc")
+    .execute();
+
+  return result.map((row) => ({
+    inspectionType: row.inspectionType!,
+    count: Number(row.count),
+  }));
+}
