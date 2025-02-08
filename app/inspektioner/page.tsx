@@ -1,5 +1,12 @@
+import { startOfYear, endOfYear, format, parseISO } from "date-fns";
 import { Breadcrumbs } from "@arbetsmarknad/components/Breadcrumb";
-import { Card, CardContent } from "@arbetsmarknad/components/Card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@arbetsmarknad/components/Card";
 import { Container } from "@arbetsmarknad/components/Container";
 import { Main } from "@arbetsmarknad/components/Main";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
@@ -18,6 +25,7 @@ import {
   countCasesPerDay,
   countDocumentsByInspectionType,
 } from "@/lib/database";
+import { generateDiariumUrl } from "@/lib/diarium";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -61,6 +69,27 @@ export default async function Inspections() {
 
           <div className="grid grid-cols-1 gap-4 w-full">
             <Card className="flex flex-col gap-y-4 border-gray-300">
+              <CardHeader className="flex flex-row items-stretch space-y-0 border-gray-300 border-b p-0 sm:flex-row">
+                <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+                  <CardTitle>Handlingar per kategori</CardTitle>
+                  <CardDescription>
+                    Antal handlingar per inspektionskategori
+                  </CardDescription>
+                </div>
+                <div className="flex">
+                  <div className="relative z-30 flex flex-1 flex-col justify-center gap-1 px-6 py-4 text-left border-gray-300 even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6">
+                    <span className="text-xs text-muted-foreground">
+                      Totalt
+                    </span>
+                    <span className="text-lg font-bold leading-none sm:text-3xl">
+                      {documentsPerInspectionType.reduce(
+                        (acc, { count }) => acc + count,
+                        0,
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </CardHeader>
               <CardContent className="flex-1 pb-4">
                 <Table>
                   <TableHeader>
@@ -79,7 +108,26 @@ export default async function Inspections() {
                           className="border-gray-200"
                         >
                           <TableCell className="font-medium">
-                            {inspectionType}
+                            <a
+                              className="text-blue-600 underline"
+                              href={generateDiariumUrl({
+                                SearchText: `Inspektion inom ${inspectionType}`,
+                                FromDate: format(
+                                  startOfYear(
+                                    parseISO(process.env.NEXT_PUBLIC_YEAR!),
+                                  ),
+                                  "yyyy-MM-dd",
+                                ),
+                                ToDate: format(
+                                  endOfYear(
+                                    parseISO(process.env.NEXT_PUBLIC_YEAR!),
+                                  ),
+                                  "yyyy-MM-dd",
+                                ),
+                              })}
+                            >
+                              {inspectionType}
+                            </a>
                           </TableCell>
                           <TableCell>{count}</TableCell>
                         </TableRow>
