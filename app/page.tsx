@@ -111,23 +111,27 @@ export default async function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
             <Card className="flex flex-col gap-y-4 border-gray-300">
-              <CardHeader className="items-center pb-0">
-                <CardTitle>
-                  <a
-                    href={`/${process.env.NEXT_PUBLIC_YEAR}/geografi`}
-                    className="text-blue-600 underline"
-                  >
-                    Geografisk fördelning
-                  </a>
-                </CardTitle>
-                <CardDescription>Antal handlingar per län</CardDescription>
+              <CardHeader className="flex flex-row items-stretch space-y-0 border-gray-300 border-b p-0 sm:flex-row">
+                <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+                  <CardTitle>
+                    <a
+                      href={`/${process.env.NEXT_PUBLIC_YEAR}/geografi`}
+                      className="text-blue-600 underline"
+                    >
+                      Geografisk fördelning
+                    </a>
+                  </CardTitle>
+                  <CardDescription>Antal handlingar per län</CardDescription>
+                </div>
               </CardHeader>
               <CardContent className="flex-1 pb-4">
                 <Table>
                   <TableHeader>
                     <TableRow className="border-gray-200">
-                      <TableHead className="font-bold">Län</TableHead>
-                      <TableHead className="font-bold">Handlingar</TableHead>
+                      <TableHead className="font-bold px-0">Län</TableHead>
+                      <TableHead className="font-bold px-0">
+                        Handlingar
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -135,7 +139,7 @@ export default async function Home() {
                       .slice(0, 5)
                       .map(({ countyName, documentCount }) => (
                         <TableRow key={countyName} className="border-gray-200">
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium px-0">
                             <a
                               className="underline text-blue-600"
                               href={`/${process.env.NEXT_PUBLIC_YEAR}/${slugify(countyName)}`}
