@@ -75,11 +75,13 @@ export default async function Asbestos() {
                 </div>
               </CardHeader>
               <CardContent className="flex-1 pb-4">
-                <Table>
+                <Table className="text-base">
                   <TableHeader>
                     <TableRow className="border-gray-200">
-                      <TableHead className="font-bold">Län</TableHead>
-                      <TableHead className="font-bold">Handlingar</TableHead>
+                      <TableHead className="font-bold px-0">Län</TableHead>
+                      <TableHead className="font-bold px-0">
+                        Handlingar
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -87,10 +89,12 @@ export default async function Asbestos() {
                       .slice(0, 10)
                       .map(({ companyName, documentCount }) => (
                         <TableRow key={companyName} className="border-gray-200">
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium px-0">
                             {companyName}
                           </TableCell>
-                          <TableCell>{documentCount}</TableCell>
+                          <TableCell className="px-0">
+                            {documentCount}
+                          </TableCell>
                         </TableRow>
                       ))}
                   </TableBody>
@@ -105,11 +109,13 @@ export default async function Asbestos() {
                 </div>
               </CardHeader>
               <CardContent className="flex-1 pb-4">
-                <Table>
+                <Table className="text-base">
                   <TableHeader>
                     <TableRow className="border-gray-200">
-                      <TableHead className="font-bold">Län</TableHead>
-                      <TableHead className="font-bold">Handlingar</TableHead>
+                      <TableHead className="font-bold px-0">Län</TableHead>
+                      <TableHead className="font-bold px-0">
+                        Handlingar
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -121,7 +127,7 @@ export default async function Asbestos() {
                             key={municipalityName}
                             className="border-gray-200"
                           >
-                            <TableCell className="font-medium">
+                            <TableCell className="font-medium px-0">
                               <a
                                 className="underline text-blue-600"
                                 href={`/${process.env.NEXT_PUBLIC_YEAR}/${slugify(countyName)}/${slugify(municipalityName)}`}
@@ -129,7 +135,9 @@ export default async function Asbestos() {
                                 {_.capitalize(municipalityName)}
                               </a>
                             </TableCell>
-                            <TableCell>{documentCount}</TableCell>
+                            <TableCell className="px-0">
+                              {documentCount}
+                            </TableCell>
                           </TableRow>
                         ),
                       )}
