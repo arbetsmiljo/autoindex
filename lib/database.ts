@@ -226,3 +226,46 @@ export async function countDocumentsByInspectionType(
     count: Number(row.count),
   }));
 }
+
+export async function countDocumentsByCompanyNameKeyword(
+  db: Kysely<DiariumDatabase>,
+  keyword: string,
+): Promise<{ companyName: string; documentCount: number }[]> {
+  const result = await db
+    .selectFrom("documents")
+    .select(["companyName", db.fn.count("documentId").as("documentCount")])
+    .where("caseName", "like", `%${keyword}%`)
+    .where("companyName", "is not", null)
+    .groupBy("companyName")
+    .orderBy("documentCount", "desc")
+    .execute();
+  return result.map((row) => ({
+    companyName: row.companyName!,
+    documentCount: Number(row.documentCount),
+  }));
+}
+
+export async function countDocumentsByMunicipalityNameKeyword(
+  db: Kysely<DiariumDatabase>,
+  keyword: string,
+): Promise<
+  { municipalityName: string; countyName: string; documentCount: number }[]
+> {
+  const result = await db
+    .selectFrom("documents")
+    .select([
+      "municipalityName",
+      "countyName",
+      db.fn.count("documentId").as("documentCount"),
+    ])
+    .where("caseName", "like", `%${keyword}%`)
+    .where("municipalityName", "is not", null)
+    .groupBy("municipalityName")
+    .orderBy("documentCount", "desc")
+    .execute();
+  return result.map((row) => ({
+    municipalityName: row.municipalityName!,
+    countyName: row.countyName!,
+    documentCount: Number(row.documentCount),
+  }));
+}
