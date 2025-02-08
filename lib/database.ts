@@ -38,6 +38,7 @@ export async function countCasesPerDay(
     q: SelectQueryBuilder<DiariumDatabase, any, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
   ) => SelectQueryBuilder<DiariumDatabase, any, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
 ): Promise<{ date: string; value: number }[]> {
+  const days = listDaysInYear(`${process.env.NEXT_PUBLIC_YEAR}`);
   let query = db
     .selectFrom("documents")
     .select(["documentDate", db.fn.count("documentId").as("documentCount")])
@@ -45,9 +46,11 @@ export async function countCasesPerDay(
     .orderBy("documentDate");
   if (where) query = where(query);
   const result = await query.execute();
-  return result.map((row) => ({
-    date: row.documentDate,
-    value: Number(row.documentCount),
+  return days.map((day) => ({
+    date: day,
+    value:
+      Number(result.find((row) => row.documentDate === day)?.documentCount) ||
+      0,
   }));
 }
 
@@ -67,6 +70,7 @@ export async function countDocumentsPerDay(
     q: SelectQueryBuilder<DiariumDatabase, any, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
   ) => SelectQueryBuilder<DiariumDatabase, any, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
 ): Promise<{ date: string; value: number }[]> {
+  const days = listDaysInYear(`${process.env.NEXT_PUBLIC_YEAR}`);
   let query = db
     .selectFrom("documents")
     .select(["documentDate", db.fn.count("documentId").as("value")]);
@@ -75,9 +79,9 @@ export async function countDocumentsPerDay(
     .groupBy("documentDate")
     .orderBy("documentDate")
     .execute();
-  return rows.map((row) => ({
-    date: row.documentDate,
-    value: Number(row.value),
+  return days.map((day) => ({
+    date: day,
+    value: Number(rows.find((row) => row.documentDate === day)?.value) || 0,
   }));
 }
 
@@ -204,6 +208,7 @@ export async function countDocumentsByMunicipality(
 }
 
 import { sql } from "kysely";
+import { listDaysInYear } from "./time";
 
 export async function countDocumentsByInspectionType(
   db: Kysely<DiariumDatabase>,
