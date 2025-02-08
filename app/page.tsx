@@ -48,6 +48,7 @@ export default async function Home() {
   const keywordMatches = await countCaseNameKeywordMatches(sqlite, [
     "asbest",
     "inspektion",
+    "olycksfall",
   ]);
   const documentsByCounty = await countDocumentsByCounty(db);
 
@@ -142,6 +143,17 @@ export default async function Home() {
                 </Table>
               </CardContent>
             </Card>
+
+            <PercentagePieChart
+              title="Olycksfall"
+              href={`/${process.env.NEXT_PUBLIC_YEAR}/olycksfall`}
+              description="Andelen handlingar som innehåller ordet 'olycksfall'"
+              numerator={keywordMatches.olycksfall}
+              denominator={totalDocuments}
+              numeratorLabel="Olycksfall"
+              complementLabel="Icke-olycksfall"
+              percentSuffix="Olycksfall"
+            />
           </div>
         </Container>
       </Main>
