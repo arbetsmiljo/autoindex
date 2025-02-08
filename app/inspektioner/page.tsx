@@ -91,13 +91,15 @@ export default async function Inspections() {
                 </div>
               </CardHeader>
               <CardContent className="flex-1 pb-4">
-                <Table>
+                <Table className="text-base">
                   <TableHeader>
                     <TableRow className="border-gray-200">
-                      <TableHead className="font-bold">
+                      <TableHead className="font-bold px-0">
                         Inspektionskategori
                       </TableHead>
-                      <TableHead className="font-bold">Handlingar</TableHead>
+                      <TableHead className="font-bold px-0">
+                        Handlingar
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -107,7 +109,7 @@ export default async function Inspections() {
                           key={inspectionType}
                           className="border-gray-200"
                         >
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium px-0">
                             <a
                               className="text-blue-600 underline"
                               href={generateDiariumUrl({
@@ -129,7 +131,7 @@ export default async function Inspections() {
                               {inspectionType}
                             </a>
                           </TableCell>
-                          <TableCell>{count}</TableCell>
+                          <TableCell className="px-0">{count}</TableCell>
                         </TableRow>
                       ),
                     )}

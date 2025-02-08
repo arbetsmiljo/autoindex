@@ -57,7 +57,7 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="px-2 sm:p-6">
+      <CardContent className="p-0 sm:p-3">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
