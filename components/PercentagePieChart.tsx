@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@arbetsmarknad/components/Card";
@@ -27,7 +26,6 @@ type PercentagePieChartProps = {
   numeratorLabel: string;
   complementLabel: string;
   percentSuffix: string;
-  footer: React.ReactNode;
 };
 
 export const PercentagePieChart: FC<PercentagePieChartProps> = ({
@@ -39,7 +37,6 @@ export const PercentagePieChart: FC<PercentagePieChartProps> = ({
   numeratorLabel,
   complementLabel,
   percentSuffix,
-  footer,
 }) => {
   const complement = denominator - numerator;
   const chartData = [
@@ -59,17 +56,19 @@ export const PercentagePieChart: FC<PercentagePieChartProps> = ({
 
   return (
     <Card className="flex flex-col border-gray-300">
-      <CardHeader className="items-center pb-0">
-        <CardTitle>
-          {href ? (
-            <a className="text-blue-600 underline" href={href}>
-              {title}
-            </a>
-          ) : (
-            title
-          )}
-        </CardTitle>
-        <CardDescription>{description}</CardDescription>
+      <CardHeader className="flex flex-row items-stretch space-y-0 border-gray-300 border-b p-0 sm:flex-row">
+        <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+          <CardTitle>
+            {href ? (
+              <a className="text-blue-600 underline" href={href}>
+                {title}
+              </a>
+            ) : (
+              title
+            )}
+          </CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </div>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -123,11 +122,6 @@ export const PercentagePieChart: FC<PercentagePieChartProps> = ({
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          {footer}
-        </div>
-      </CardFooter>
     </Card>
   );
 };

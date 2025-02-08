@@ -83,12 +83,6 @@ export default async function Home() {
               numeratorLabel="Inspektion"
               complementLabel="Icke-inspektion"
               percentSuffix="Inspektioner"
-              footer={
-                <>
-                  Av totalt {totalDocuments} handlingar är{" "}
-                  {keywordMatches.inspektion} p.g.a. inspektioner.
-                </>
-              }
             />
 
             <PercentagePieChart
@@ -100,12 +94,6 @@ export default async function Home() {
               numeratorLabel="Asbest"
               complementLabel="Icke-asbest"
               percentSuffix="Asbest"
-              footer={
-                <>
-                  Av totalt {totalDocuments} handlingar är{" "}
-                  {keywordMatches.asbest} p.g.a. asbest.
-                </>
-              }
             />
           </div>
 
@@ -125,7 +113,7 @@ export default async function Home() {
                 </div>
               </CardHeader>
               <CardContent className="flex-1 pb-4">
-                <Table>
+                <Table className="text-base">
                   <TableHeader>
                     <TableRow className="border-gray-200">
                       <TableHead className="font-bold px-0">Län</TableHead>

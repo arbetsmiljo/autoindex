@@ -57,7 +57,7 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-0 sm:p-3">
+      <CardContent className="p-0">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
@@ -66,8 +66,8 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
             accessibilityLayer
             data={data}
             margin={{
-              left: 12,
-              right: 12,
+              left: 24,
+              right: 24,
             }}
           >
             <CartesianGrid vertical={false} />
@@ -75,7 +75,7 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
               dataKey="date"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tickMargin={0}
               minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value);
