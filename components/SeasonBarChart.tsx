@@ -61,7 +61,7 @@ export const SeasonBarChart: FC<SeasonBarChartProps> = ({
           <CardDescription>{description}</CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="flex-1 pb-0 flex items-center">
+      <CardContent className="flex-1 py-2 flex items-center">
         <ChartContainer config={{}} className="aspect-auto h-[250px] w-full">
           <BarChart
             accessibilityLayer
@@ -81,25 +81,22 @@ export const SeasonBarChart: FC<SeasonBarChartProps> = ({
               hide={true}
             />
             <XAxis dataKey="count" type="number" hide />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
+
             <Bar dataKey="count" layout="vertical" radius={4}>
               <LabelList
                 dataKey="season"
                 position="insideLeft"
                 offset={8}
                 className="fill-white"
-                fontSize={12}
+                fontSize={16}
                 formatter={(value: string) => t(value)}
               />
               <LabelList
                 dataKey="count"
                 position="right"
                 offset={8}
-                className="fill-foreground"
-                fontSize={12}
+                className="fill-black"
+                fontSize={16}
               />
             </Bar>
           </BarChart>

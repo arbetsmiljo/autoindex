@@ -71,7 +71,7 @@ export default async function Home() {
 
           <DateRangeBarChart
             title="Handlingar per dag"
-            description="Visar antalet handlingar per dag genom året."
+            description="Antalet handlingar per dag genom året."
             data={documentsPerDay}
             valueLabel="Handlingar"
           />
@@ -88,15 +88,10 @@ export default async function Home() {
               percentSuffix="Inspektioner"
             />
 
-            <PercentagePieChart
-              title="Asbesthandlingar"
-              href={`/${process.env.NEXT_PUBLIC_YEAR}/asbest`}
-              description="Andelen handlingar som innehåller ordet 'asbest'"
-              numerator={keywordMatches.asbest}
-              denominator={totalDocuments}
-              numeratorLabel="Asbest"
-              complementLabel="Icke-asbest"
-              percentSuffix="Asbest"
+            <SeasonBarChart
+              title="Olycksfall"
+              description="Antalet ärenden som innehåller ordet 'olycksfall' per säsong."
+              data={accidentCasesPerSeason}
             />
           </div>
 
@@ -112,7 +107,7 @@ export default async function Home() {
                       Geografisk fördelning
                     </a>
                   </CardTitle>
-                  <CardDescription>Antal handlingar per län</CardDescription>
+                  <CardDescription>Antalet handlingar per län</CardDescription>
                 </div>
               </CardHeader>
               <CardContent className="flex-1 pb-4">
@@ -145,11 +140,15 @@ export default async function Home() {
                 </Table>
               </CardContent>
             </Card>
-
-            <SeasonBarChart
-              title="Olycksfall"
-              description="Antalet ärende som innehåller ordet 'olycksfall' per säsong."
-              data={accidentCasesPerSeason}
+            <PercentagePieChart
+              title="Asbesthandlingar"
+              href={`/${process.env.NEXT_PUBLIC_YEAR}/asbest`}
+              description="Andelen handlingar som innehåller ordet 'asbest'"
+              numerator={keywordMatches.asbest}
+              denominator={totalDocuments}
+              numeratorLabel="Asbest"
+              complementLabel="Icke-asbest"
+              percentSuffix="Asbest"
             />
           </div>
         </Container>
