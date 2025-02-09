@@ -274,3 +274,35 @@ export async function countDocumentsByMunicipalityNameKeyword(
     documentCount: Number(row.documentCount),
   }));
 }
+
+export async function countCasesPerSeason(
+  db: Kysely<DiariumDatabase>,
+  keyword: string,
+): Promise<{ season: string; count: number }[]> {
+  const result = await db
+    .selectFrom("documents")
+    .select([
+      sql<string>`CASE
+        WHEN strftime('%m', documentDate) IN ('03', '04', '05') THEN 'spring'
+        WHEN strftime('%m', documentDate) IN ('06', '07', '08') THEN 'summer'
+        WHEN strftime('%m', documentDate) IN ('09', '10', '11') THEN 'autumn'
+        ELSE 'winter'
+      END`.as("season"),
+      db.fn.count("documentId").as("count"),
+    ])
+    .where("caseName", "like", `%${keyword}%`)
+    .groupBy("season")
+    .orderBy(
+      sql<number>`CASE
+        WHEN season = 'spring' THEN 1
+        WHEN season = 'summer' THEN 2
+        WHEN season = 'autumn' THEN 3
+        ELSE 4
+      END`,
+    )
+    .execute();
+  return result.map((row) => ({
+    season: row.season!,
+    count: Number(row.count),
+  }));
+}

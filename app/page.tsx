@@ -28,15 +28,16 @@ import {
   countDocumentsPerDay,
   countCaseNameKeywordMatches,
   countDocumentsByCounty,
+  countCasesPerSeason,
 } from "@/lib/database";
 import { slugify } from "@/lib/slugify";
+import { SeasonBarChart } from "@/components/SeasonBarChart";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `Arbetsmiljö ${process.env.NEXT_PUBLIC_YEAR}`,
   };
 }
-
 export default async function Home() {
   const directoryPath = process.env.SOURCE_DIRECTORY_PATH;
   const databasePath = `${directoryPath}/db.sqlite`;
@@ -51,6 +52,7 @@ export default async function Home() {
     "olycksfall",
   ]);
   const documentsByCounty = await countDocumentsByCounty(db);
+  const accidentCasesPerSeason = await countCasesPerSeason(db, "olycksfall");
 
   return (
     <>
@@ -144,15 +146,10 @@ export default async function Home() {
               </CardContent>
             </Card>
 
-            <PercentagePieChart
+            <SeasonBarChart
               title="Olycksfall"
-              href={`/${process.env.NEXT_PUBLIC_YEAR}/olycksfall`}
-              description="Andelen handlingar som innehåller ordet 'olycksfall'"
-              numerator={keywordMatches.olycksfall}
-              denominator={totalDocuments}
-              numeratorLabel="Olycksfall"
-              complementLabel="Icke-olycksfall"
-              percentSuffix="Olycksfall"
+              description="Antalet ärende som innehåller ordet 'olycksfall' per säsong."
+              data={accidentCasesPerSeason}
             />
           </div>
         </Container>
