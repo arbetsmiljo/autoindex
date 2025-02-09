@@ -1,25 +1,10 @@
-import { startOfYear, endOfYear, format, parseISO } from "date-fns";
 import { Breadcrumbs } from "@arbetsmarknad/components/Breadcrumb";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@arbetsmarknad/components/Card";
+
 import { Container } from "@arbetsmarknad/components/Container";
 import { Main } from "@arbetsmarknad/components/Main";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 import { Metadata } from "next";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@arbetsmarknad/components/Table";
 import { initKysely, countCasesPerDay } from "@/lib/database";
 
 export async function generateMetadata(): Promise<Metadata> {
