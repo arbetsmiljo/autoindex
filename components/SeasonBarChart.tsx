@@ -9,7 +9,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-
 import {
   Card,
   CardContent,
@@ -17,12 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@arbetsmarknad/components/Card";
-
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@arbetsmarknad/components/Chart";
+import { ChartContainer } from "@arbetsmarknad/components/Chart";
 
 type SeasonBarChartProps = {
   title: string;
