@@ -1,5 +1,5 @@
 import { initKysely, latestDocuments } from "@/lib/database";
-import fs from "fs";
+import { writeFile, stat } from "fs/promises";
 import path from "path";
 
 if (process.argv.length < 3) {
@@ -12,5 +12,7 @@ if (process.argv.length < 3) {
   const db = initKysely(src);
   const latest = await latestDocuments(db);
   console.log(`Writing ${latest.length} documents to ${dst}`);
-  fs.writeFileSync(dst, JSON.stringify(latest));
+  await writeFile(dst, JSON.stringify(latest));
+  const { size } = await stat(dst);
+  console.log(`Wrote ${size} bytes`);
 })();
