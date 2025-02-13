@@ -22,16 +22,16 @@ runs:
       shell: bash
       working-directory: ${{ github.action_path }}
 
+    - run: pnpm latest ${{ github.workspace }}/db.sqlite ${{ github.action_path }}/out/data.json
+      shell: bash
+      working-directory: ${{ github.action_path }}
+
     - run: pnpm build
       shell: bash
       working-directory: ${{ github.action_path }}
       env:
         NEXT_PUBLIC_YEAR: ${{ inputs.year }}
         SOURCE_DIRECTORY_PATH: ${{ github.workspace }}
-
-    - run: pnpm latest ${{ github.workspace }}/db.sqlite ${{ github.action_path }}/out/data.json
-      shell: bash
-      working-directory: ${{ github.action_path }}
 
     - uses: peaceiris/actions-gh-pages@v4
       with:
