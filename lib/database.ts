@@ -307,27 +307,26 @@ export async function countCasesPerSeason(
   }));
 }
 
-export async function latestDocuments(
-  db: Kysely<DiariumDatabase>,
-): Promise<(Omit<DiariumDocument, "created"> & { created: string })[]> {
+export async function latestDocuments(db: Kysely<DiariumDatabase>): Promise<
+  {
+    documentId: string;
+    documentDate: string;
+    documentType: string;
+    caseName: string;
+    companyId?: string;
+    companyName?: string;
+    created: string;
+  }[]
+> {
   const result = await db
     .selectFrom("documents")
     .select([
       "documentId",
       "documentDate",
-      "documentOrigin",
       "documentType",
-      "caseId",
       "caseName",
-      "caseSubject",
       "companyId",
       "companyName",
-      "workplaceId",
-      "workplaceName",
-      "countyId",
-      "countyName",
-      "municipalityId",
-      "municipalityName",
       "created",
     ])
     .orderBy("created", "desc")
@@ -336,19 +335,10 @@ export async function latestDocuments(
   const documents = result.map((row) => ({
     documentId: row.documentId!,
     documentDate: row.documentDate!,
-    documentOrigin: row.documentOrigin!,
     documentType: row.documentType!,
-    caseId: row.caseId!,
     caseName: row.caseName!,
-    caseSubject: row.caseSubject!,
     companyId: row.companyId,
     companyName: row.companyName,
-    workplaceId: row.workplaceId,
-    workplaceName: row.workplaceName,
-    countyId: row.countyId,
-    countyName: row.countyName,
-    municipalityId: row.municipalityId,
-    municipalityName: row.municipalityName,
     created: `${row.created}`,
   }));
   return documents;
