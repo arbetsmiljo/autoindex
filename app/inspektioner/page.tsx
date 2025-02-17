@@ -68,8 +68,8 @@ export default async function Inspections() {
           />
 
           <div className="grid grid-cols-1 gap-4 w-full">
-            <Card className="flex flex-col gap-y-4 border-gray-300">
-              <CardHeader className="flex flex-row items-stretch space-y-0 border-gray-300 border-b p-0 sm:flex-row">
+            <Card className="flex flex-col gap-y-4 border-background-secondary">
+              <CardHeader className="flex flex-row items-stretch space-y-0 border-background-secondary border-b p-0 sm:flex-row">
                 <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
                   <CardTitle>Handlingar per kategori</CardTitle>
                   <CardDescription>
@@ -77,7 +77,7 @@ export default async function Inspections() {
                   </CardDescription>
                 </div>
                 <div className="flex">
-                  <div className="relative z-30 flex flex-1 flex-col justify-center gap-1 px-6 py-4 text-left border-gray-300 even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6">
+                  <div className="relative z-30 flex flex-1 flex-col justify-center gap-1 px-6 py-4 text-left border-background-secondary even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6">
                     <span className="text-xs text-muted-foreground">
                       Totalt
                     </span>
@@ -111,7 +111,7 @@ export default async function Inspections() {
                         >
                           <TableCell className="font-medium px-0">
                             <a
-                              className="text-blue-600 underline"
+                              className="text-link underline"
                               href={generateDiariumUrl({
                                 SearchText: `Inspektion inom ${inspectionType}`,
                                 FromDate: format(

@@ -55,12 +55,12 @@ export const PercentagePieChart: FC<PercentagePieChartProps> = ({
   const percent = Math.round((numerator / denominator) * 100);
 
   return (
-    <Card className="flex flex-col border-gray-300">
-      <CardHeader className="flex flex-row items-stretch space-y-0 border-gray-300 border-b p-0 sm:flex-row">
+    <Card className="flex flex-col border-background-secondary">
+      <CardHeader className="flex flex-row items-stretch space-y-0 border-background-secondary border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
           <CardTitle>
             {href ? (
-              <a className="text-blue-600 underline" href={href}>
+              <a className="text-link underline" href={href}>
                 {title}
               </a>
             ) : (

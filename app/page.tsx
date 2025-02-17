@@ -96,13 +96,13 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-            <Card className="flex flex-col gap-y-4 border-gray-300">
-              <CardHeader className="flex flex-row items-stretch space-y-0 border-gray-300 border-b p-0 sm:flex-row">
+            <Card className="flex flex-col gap-y-4 border-background-secondary">
+              <CardHeader className="flex flex-row items-stretch space-y-0 border-background-secondary border-b p-0 sm:flex-row">
                 <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
                   <CardTitle>
                     <a
                       href={`/${process.env.NEXT_PUBLIC_YEAR}/geografi`}
-                      className="text-blue-600 underline"
+                      className="text-link underline"
                     >
                       Geografisk fördelning
                     </a>
@@ -127,7 +127,7 @@ export default async function Home() {
                         <TableRow key={countyName} className="border-gray-200">
                           <TableCell className="font-medium px-0">
                             <a
-                              className="underline text-blue-600"
+                              className="underline text-link"
                               href={`/${process.env.NEXT_PUBLIC_YEAR}/${slugify(countyName)}`}
                             >
                               {_.capitalize(countyName)}
