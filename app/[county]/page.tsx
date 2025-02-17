@@ -87,7 +87,7 @@ export default async function County(props: CountyProps) {
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-            <Card className="flex flex-col gap-y-4 border-gray-300">
+            <Card className="flex flex-col gap-y-4 border-background-secondary">
               <CardHeader className="items-center pb-0">
                 <CardTitle>Geografisk fördelning</CardTitle>
                 <CardDescription>Antal handlingar per kommun</CardDescription>
@@ -109,7 +109,7 @@ export default async function County(props: CountyProps) {
                         >
                           <TableCell className="font-medium">
                             <a
-                              className="underline text-blue-600"
+                              className="underline text-link"
                               href={`/${process.env.NEXT_PUBLIC_YEAR}/${slugify(county.countyName)}/${slugify(municipalityName)}`}
                             >
                               {_.capitalize(municipalityName)}
