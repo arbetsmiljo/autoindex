@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "@arbetsmarknad/components/dist.css";
+@import "../node_modules/@arbetsmarknad/components/tailwind.css";
+@source "../node_modules/@arbetsmarknad/components";
 
 body {
   color: var(--color-foreground);
