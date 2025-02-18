@@ -77,7 +77,7 @@ export default async function Asbestos() {
               <CardContent className="flex-1 pb-4">
                 <Table className="text-base">
                   <TableHeader>
-                    <TableRow className="border-gray-200">
+                    <TableRow className="border-background-secondary">
                       <TableHead className="font-bold px-0">Län</TableHead>
                       <TableHead className="font-bold px-0">
                         Handlingar
@@ -88,7 +88,10 @@ export default async function Asbestos() {
                     {asbestosCompanyRanking
                       .slice(0, 10)
                       .map(({ companyName, documentCount }) => (
-                        <TableRow key={companyName} className="border-gray-200">
+                        <TableRow
+                          key={companyName}
+                          className="border-background-secondary"
+                        >
                           <TableCell className="font-medium px-0">
                             {companyName}
                           </TableCell>
@@ -111,7 +114,7 @@ export default async function Asbestos() {
               <CardContent className="flex-1 pb-4">
                 <Table className="text-base">
                   <TableHeader>
-                    <TableRow className="border-gray-200">
+                    <TableRow className="border-background-secondary">
                       <TableHead className="font-bold px-0">Län</TableHead>
                       <TableHead className="font-bold px-0">
                         Handlingar
@@ -125,7 +128,7 @@ export default async function Asbestos() {
                         ({ municipalityName, countyName, documentCount }) => (
                           <TableRow
                             key={municipalityName}
-                            className="border-gray-200"
+                            className="border-background-secondary"
                           >
                             <TableCell className="font-medium px-0">
                               <a

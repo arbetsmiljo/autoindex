@@ -43,12 +43,12 @@ export const PercentagePieChart: FC<PercentagePieChartProps> = ({
     {
       name: numeratorLabel,
       data: numerator,
-      fill: "black",
+      fill: "var(--color-foreground)",
     },
     {
       name: complementLabel,
       data: complement,
-      fill: "#bbb",
+      fill: "var(--color-background-secondary)",
     },
   ];
 
@@ -79,7 +79,10 @@ export const PercentagePieChart: FC<PercentagePieChartProps> = ({
             <ChartTooltip
               cursor={false}
               content={
-                <ChartTooltipContent className="w-[150px] bg-white" hideLabel />
+                <ChartTooltipContent
+                  className="w-[150px] bg-background"
+                  hideLabel
+                />
               }
             />
             <Pie
@@ -109,7 +112,7 @@ export const PercentagePieChart: FC<PercentagePieChartProps> = ({
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
+                          className="fill-foreground"
                         >
                           {percentSuffix}
                         </tspan>

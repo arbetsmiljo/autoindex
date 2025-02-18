@@ -93,7 +93,7 @@ export default async function Inspections() {
               <CardContent className="flex-1 pb-4">
                 <Table className="text-base">
                   <TableHeader>
-                    <TableRow className="border-gray-200">
+                    <TableRow className="border-background-secondary">
                       <TableHead className="font-bold px-0">
                         Inspektionskategori
                       </TableHead>
@@ -107,7 +107,7 @@ export default async function Inspections() {
                       ({ inspectionType, count }) => (
                         <TableRow
                           key={inspectionType}
-                          className="border-gray-200"
+                          className="border-background-secondary"
                         >
                           <TableCell className="font-medium px-0">
                             <a

@@ -95,7 +95,7 @@ export default async function County(props: CountyProps) {
               <CardContent className="flex-1 pb-4">
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-gray-200">
+                    <TableRow className="border-background-secondary">
                       <TableHead className="font-bold">Län</TableHead>
                       <TableHead className="font-bold">Handlingar</TableHead>
                     </TableRow>
@@ -105,7 +105,7 @@ export default async function County(props: CountyProps) {
                       ({ municipalityName, documentCount }) => (
                         <TableRow
                           key={municipalityName}
-                          className="border-gray-200"
+                          className="border-background-secondary"
                         >
                           <TableCell className="font-medium">
                             <a
