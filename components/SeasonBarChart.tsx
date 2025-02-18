@@ -76,12 +76,17 @@ export const SeasonBarChart: FC<SeasonBarChartProps> = ({
             />
             <XAxis dataKey="count" type="number" hide />
 
-            <Bar dataKey="count" layout="vertical" radius={4}>
+            <Bar
+              dataKey="count"
+              layout="vertical"
+              radius={4}
+              fill="var(--color-foreground)"
+            >
               <LabelList
                 dataKey="season"
                 position="insideLeft"
                 offset={8}
-                className="fill-white"
+                className="fill-background"
                 fontSize={16}
                 formatter={(value: string) => t(value)}
               />
@@ -89,7 +94,7 @@ export const SeasonBarChart: FC<SeasonBarChartProps> = ({
                 dataKey="count"
                 position="right"
                 offset={8}
-                className="fill-black"
+                className="fill-foreground"
                 fontSize={16}
               />
             </Bar>

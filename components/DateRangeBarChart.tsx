@@ -31,10 +31,7 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
   valueLabel,
 }) => {
   const chartConfig = {
-    value: {
-      label: valueLabel,
-      color: "black",
-    },
+    value: { label: valueLabel },
   } satisfies ChartConfig;
 
   const total = data.reduce((acc, { value }) => {
@@ -78,8 +75,9 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
               dataKey="date"
               tickLine={false}
               axisLine={false}
-              tickMargin={0}
+              tickMargin={4}
               minTickGap={32}
+              stroke="var(--color-foreground)"
               tickFormatter={(value) => {
                 const date = new Date(value);
                 return date.toLocaleDateString("sv-SE", {
@@ -91,7 +89,7 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
             <ChartTooltip
               content={
                 <ChartTooltipContent
-                  className="w-[150px] bg-white"
+                  className="w-[150px] bg-background"
                   nameKey="value"
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString("sv-SE", {
@@ -103,7 +101,7 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
                 />
               }
             />
-            <Bar dataKey="value" fill="black" />
+            <Bar dataKey="value" fill="var(--color-foreground)" />
           </BarChart>
         </ChartContainer>
       </CardContent>

@@ -59,7 +59,7 @@ export default async function Inspections() {
               <CardContent className="flex-1 pb-4">
                 <Table className="text-base">
                   <TableHeader>
-                    <TableRow className="border-gray-200">
+                    <TableRow className="border-background-secondary">
                       <TableHead className="font-bold px-0">Län</TableHead>
                       <TableHead className="font-bold px-0">
                         Handlingar
@@ -68,7 +68,10 @@ export default async function Inspections() {
                   </TableHeader>
                   <TableBody>
                     {documentsByCounty.map(({ countyName, documentCount }) => (
-                      <TableRow key={countyName} className="border-gray-200">
+                      <TableRow
+                        key={countyName}
+                        className="border-background-secondary"
+                      >
                         <TableCell className="px-0">
                           <a
                             className="underline text-link"

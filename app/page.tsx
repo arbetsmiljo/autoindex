@@ -113,7 +113,7 @@ export default async function Home() {
               <CardContent className="flex-1 pb-4">
                 <Table className="text-base">
                   <TableHeader>
-                    <TableRow className="border-gray-200">
+                    <TableRow className="border-background-secondary">
                       <TableHead className="font-bold px-0">Län</TableHead>
                       <TableHead className="font-bold px-0">
                         Handlingar
@@ -124,7 +124,10 @@ export default async function Home() {
                     {documentsByCounty
                       .slice(0, 5)
                       .map(({ countyName, documentCount }) => (
-                        <TableRow key={countyName} className="border-gray-200">
+                        <TableRow
+                          key={countyName}
+                          className="border-background-secondary"
+                        >
                           <TableCell className="font-medium px-0">
                             <a
                               className="underline text-link"
