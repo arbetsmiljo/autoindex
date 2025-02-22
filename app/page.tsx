@@ -58,7 +58,7 @@ export default async function Home() {
     <>
       <Breadcrumbs>
         {{
-          "https://arbetsmarknad.github.io/": "Arbetsmarknad",
+          "https://arbetsmarknad.codeberg.page/": "Arbetsmarknad",
           "/": "Arbetsmiljö",
           [`/${process.env.NEXT_PUBLIC_YEAR}`]: `${process.env.NEXT_PUBLIC_YEAR}`,
         }}

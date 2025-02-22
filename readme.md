@@ -1,7 +1,7 @@
-# starter
+# autoindex
 
-Web starter project.
+Generates a HTML index of Swedish work environment data from a particular year
 
 ## License
 
-[MIT](https://github.com/arbetsmarknad/starter/blob/main/license)
+[MIT](https://codeberg.org/arbetsmiljo/autoindex/src/branch/main/license)
