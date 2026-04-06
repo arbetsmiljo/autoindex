@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { FC } from "react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   Card,
   CardContent,
@@ -71,6 +71,15 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
               vertical={false}
               stroke="var(--color-background-secondary)"
             />
+            <YAxis
+              dataKey="value"
+              tickMargin={8}
+              width={10}
+              axisLine={false}
+              stroke="var(--color-foreground)"
+              tickCount={6}
+              tickSize={0}
+            />
             <XAxis
               dataKey="date"
               tickLine={false}
@@ -87,6 +96,7 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
               }}
             />
             <ChartTooltip
+              offset={-10}
               content={
                 <ChartTooltipContent
                   className="w-[150px] bg-background"
