@@ -32,8 +32,8 @@ export default function RootLayout({
       >
         <Page>
           <HeaderMenu
-            canonicalUrl="https://arbetsmiljo.codeberg.page"
-            deploymentUrl="https://arbetsmiljo.codeberg.page"
+            canonicalUrl="https://arbetsmiljo.github.io"
+            deploymentUrl="https://arbetsmiljo.github.io"
           />
           {children}
           <Footer

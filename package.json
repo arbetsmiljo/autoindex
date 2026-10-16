@@ -14,7 +14,7 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "@arbetsmarknad/components": "^1.1.1",
+    "@arbetsmarknad/components": "^1.3.0",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/better-sqlite3": "^7.6.12",
@@ -30,7 +30,7 @@
     "tsx": "^4.19.2",
     "typescript": "^5"
   },
-  "homepage": "https://codeberg.org/arbetsmiljo/autoindex",
+  "homepage": "https://github.io/arbetsmiljo/autoindex",
   "license": "CC0-1.0",
   "name": "@arbetsmiljo/autoindex",
   "pnpm": {
@@ -48,7 +48,7 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "ship": "NEXT_PUBLIC_YEAR=$YEAR SOURCE_DIRECTORY_PATH=../$YEAR pnpm build && npx gh-pages --nojekyll --no-history --branch pages -d out --repo git@codeberg.org:arbetsmiljo/$YEAR.git",
+    "ship": "NEXT_PUBLIC_YEAR=$YEAR SOURCE_DIRECTORY_PATH=../$YEAR pnpm build && npx gh-pages --nojekyll --no-history --branch gh-pages -d out --repo git@github.com:arbetsmiljo/$YEAR.git",
     "start": "next start"
   },
   "version": "0.1.0"

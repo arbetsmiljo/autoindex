@@ -27,7 +27,7 @@ export default async function Accidents() {
     <>
       <Breadcrumbs>
         {{
-          "https://arbetsmarknad.codeberg.page/": "Arbetsmarknad",
+          "https://arbetsmarknad.github.io/": "Arbetsmarknad",
           "/": "Arbetsmiljö",
           [`/${process.env.NEXT_PUBLIC_YEAR}`]: `${process.env.NEXT_PUBLIC_YEAR}`,
           [`/${process.env.NEXT_PUBLIC_YEAR}/olycksfall`]: "Olycksfall",

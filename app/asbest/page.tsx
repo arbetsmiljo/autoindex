@@ -51,7 +51,7 @@ export default async function Asbestos() {
     <>
       <Breadcrumbs>
         {{
-          "https://arbetsmarknad.codeberg.page/": "Arbetsmarknad",
+          "https://arbetsmarknad.github.io/": "Arbetsmarknad",
           "/": "Arbetsmiljö",
           [`/${process.env.NEXT_PUBLIC_YEAR}`]: `${process.env.NEXT_PUBLIC_YEAR}`,
           [`/${process.env.NEXT_PUBLIC_YEAR}/asbest`]: "Asbest",
