@@ -19,6 +19,7 @@ import {
 
 type DateRangeBarChartProps = {
   title: string;
+  href?: string;
   description: string;
   data: { date: string; value: number }[];
   valueLabel: string;
@@ -26,6 +27,7 @@ type DateRangeBarChartProps = {
 
 export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
   title,
+  href,
   description,
   data,
   valueLabel,
@@ -42,7 +44,15 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
     <Card className="w-full border-background-secondary">
       <CardHeader className="flex flex-row items-stretch space-y-0 border-background-secondary border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-          <CardTitle>{title}</CardTitle>
+          <CardTitle>
+            {href ? (
+              <a className="text-link underline" href={href}>
+                {title}
+              </a>
+            ) : (
+              title
+            )}
+          </CardTitle>
           <CardDescription>{description}</CardDescription>
         </div>
         <div className="flex">

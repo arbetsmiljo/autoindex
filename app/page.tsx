@@ -29,13 +29,16 @@ import {
   countCaseNameKeywordMatches,
   countDocumentsByCounty,
   countCasesPerSeason,
+  countCaseHandlingTime,
+  countSingleDocumentCaseShare,
 } from "@/lib/database";
 import { slugify } from "@/lib/slugify";
 import { SeasonBarChart } from "@/components/SeasonBarChart";
+import { CategoryBarChart } from "@/components/CategoryBarChart";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `Arbetsmiljö ${process.env.NEXT_PUBLIC_YEAR}`,
+    title: `Arbetsmiljödata ${process.env.NEXT_PUBLIC_YEAR}`,
   };
 }
 export default async function Home() {
@@ -53,6 +56,8 @@ export default async function Home() {
   ]);
   const documentsByCounty = await countDocumentsByCounty(db);
   const accidentCasesPerSeason = await countCasesPerSeason(db, "olycksfall");
+  const caseHandlingTime = await countCaseHandlingTime(db);
+  const singleDocumentCaseShare = await countSingleDocumentCaseShare(db);
 
   return (
     <>
@@ -64,13 +69,15 @@ export default async function Home() {
         }}
       </Breadcrumbs>
       <Main>
-        <Container className="flex flex-col items-start space-y-4">
+        <Container className="flex flex-col items-start space-y-8 pb-16">
           <TopLevelHeading
-            text={`Arbetsmiljö ${process.env.NEXT_PUBLIC_YEAR}`}
+            text={`Arbetsmiljödata ${process.env.NEXT_PUBLIC_YEAR}`}
+            subtext={`Data om Arbetsmiljöverkets diarium för ${process.env.NEXT_PUBLIC_YEAR}`}
           />
 
           <DateRangeBarChart
-            title="Handlingar per dag"
+            title="Handlingar över tid"
+            href={`/${process.env.NEXT_PUBLIC_YEAR}/handlingar-over-tid`}
             description="Antalet handlingar per dag genom året."
             data={documentsPerDay}
             valueLabel="Handlingar"
@@ -152,6 +159,19 @@ export default async function Home() {
               numeratorLabel="Asbest"
               complementLabel="Icke-asbest"
               percentSuffix="Asbest"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+            <CategoryBarChart
+              title="Handläggningstid"
+              href={`/${process.env.NEXT_PUBLIC_YEAR}/handlaggningstid`}
+              description="Tid från första till sista handling i ärenden med fler än en handling."
+              data={caseHandlingTime}
+              stat={{
+                label: "Engångsärenden",
+                value: `${singleDocumentCaseShare.percent}%`,
+              }}
             />
           </div>
         </Container>

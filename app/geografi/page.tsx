@@ -44,7 +44,7 @@ export default async function Inspections() {
         }}
       </Breadcrumbs>
       <Main>
-        <Container className="flex flex-col items-start space-y-4">
+        <Container className="flex flex-col items-start space-y-4 pb-16">
           <TopLevelHeading
             text={`Arbetsmiljöhandlingar ${process.env.NEXT_PUBLIC_YEAR}`}
             subtext="Geografisk fördelning"

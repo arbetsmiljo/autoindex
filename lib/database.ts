@@ -343,3 +343,200 @@ export async function latestDocuments(db: Kysely<DiariumDatabase>): Promise<
   }));
   return documents;
 }
+
+export async function countDocumentsByOrigin(
+  db: Kysely<DiariumDatabase>,
+): Promise<{ label: string; value: number }[]> {
+  const result = await db
+    .selectFrom("documents")
+    .select(["documentOrigin", db.fn.count("documentId").as("documentCount")])
+    .groupBy("documentOrigin")
+    .orderBy("documentCount", "desc")
+    .execute();
+  return result.map((row) => ({
+    label: row.documentOrigin!,
+    value: Number(row.documentCount),
+  }));
+}
+
+const handlingTimeBuckets = [
+  "≤ 1 vecka",
+  "≤ 1 månad",
+  "≤ 3 månader",
+  "≤ 6 månader",
+  "> 6 månader",
+];
+
+export async function countCaseHandlingTime(
+  db: Kysely<DiariumDatabase>,
+): Promise<{ label: string; value: number }[]> {
+  const result = await sql<{ bucket: string; caseCount: number }>`
+    WITH span AS (
+      SELECT
+        caseId,
+        julianday(MAX(documentDate)) - julianday(MIN(documentDate)) AS days
+      FROM documents
+      GROUP BY caseId
+      HAVING COUNT(*) > 1
+    )
+    SELECT
+      CASE
+        WHEN days <= 7 THEN '≤ 1 vecka'
+        WHEN days <= 30 THEN '≤ 1 månad'
+        WHEN days <= 90 THEN '≤ 3 månader'
+        WHEN days <= 180 THEN '≤ 6 månader'
+        ELSE '> 6 månader'
+      END AS bucket,
+      COUNT(*) AS caseCount
+    FROM span
+    GROUP BY bucket
+  `.execute(db);
+  return result.rows
+    .map((row) => ({ label: row.bucket, value: Number(row.caseCount) }))
+    .sort(
+      (a, b) =>
+        handlingTimeBuckets.indexOf(a.label) -
+        handlingTimeBuckets.indexOf(b.label),
+    );
+}
+
+export async function countSingleDocumentCaseShare(
+  db: Kysely<DiariumDatabase>,
+): Promise<{ singleDocumentCases: number; totalCases: number; percent: number }> {
+  const result = await sql<{ singleDocumentCases: number; totalCases: number }>`
+    SELECT
+      SUM(CASE WHEN n = 1 THEN 1 ELSE 0 END) AS singleDocumentCases,
+      COUNT(*) AS totalCases
+    FROM (SELECT caseId, COUNT(*) AS n FROM documents GROUP BY caseId)
+  `.execute(db);
+  const row = result.rows[0];
+  const singleDocumentCases = Number(row.singleDocumentCases);
+  const totalCases = Number(row.totalCases);
+  return {
+    singleDocumentCases,
+    totalCases,
+    percent: Math.round((singleDocumentCases / totalCases) * 100),
+  };
+}
+
+export async function countDocumentsByOriginPerDay(
+  db: Kysely<DiariumDatabase>,
+): Promise<
+  { date: string; Inkommande: number; Utgående: number; Upprättad: number }[]
+> {
+  const days = listDaysInYear(`${process.env.NEXT_PUBLIC_YEAR}`);
+  const rows = await db
+    .selectFrom("documents")
+    .select([
+      "documentDate",
+      sql<number>`SUM(CASE WHEN documentOrigin = 'Inkommande' THEN 1 ELSE 0 END)`.as(
+        "inkommande",
+      ),
+      sql<number>`SUM(CASE WHEN documentOrigin = 'Utgående' THEN 1 ELSE 0 END)`.as(
+        "utgaende",
+      ),
+      sql<number>`SUM(CASE WHEN documentOrigin = 'Upprättad' THEN 1 ELSE 0 END)`.as(
+        "upprattad",
+      ),
+    ])
+    .groupBy("documentDate")
+    .orderBy("documentDate")
+    .execute();
+  return days.map((day) => {
+    const row = rows.find((r) => r.documentDate === day);
+    return {
+      date: day,
+      Inkommande: Number(row?.inkommande ?? 0),
+      Utgående: Number(row?.utgaende ?? 0),
+      Upprättad: Number(row?.upprattad ?? 0),
+    };
+  });
+}
+
+export async function countDocumentsByOriginPerWeek(
+  db: Kysely<DiariumDatabase>,
+): Promise<
+  { date: string; Inkommande: number; Utgående: number; Upprättad: number }[]
+> {
+  const days = await countDocumentsByOriginPerDay(db);
+  const weeks = new Map<
+    string,
+    { date: string; Inkommande: number; Utgående: number; Upprättad: number }
+  >();
+  for (const day of days) {
+    const date = new Date(`${day.date}T00:00:00Z`);
+    const weekday = (date.getUTCDay() + 6) % 7; // Monday = 0
+    date.setUTCDate(date.getUTCDate() - weekday);
+    const key = date.toISOString().slice(0, 10);
+    const week = weeks.get(key) ?? {
+      date: key,
+      Inkommande: 0,
+      Utgående: 0,
+      Upprättad: 0,
+    };
+    week.Inkommande += day.Inkommande;
+    week.Utgående += day.Utgående;
+    week.Upprättad += day.Upprättad;
+    weeks.set(key, week);
+  }
+  return Array.from(weeks.values()).sort((a, b) =>
+    a.date.localeCompare(b.date),
+  );
+}
+
+export async function countHandlingTimeBySubject(
+  db: Kysely<DiariumDatabase>,
+): Promise<{ label: string; value: number }[]> {
+  const result = await sql<{ caseSubject: string; avgDays: number }>`
+    WITH span AS (
+      SELECT
+        caseId,
+        caseSubject,
+        julianday(MAX(documentDate)) - julianday(MIN(documentDate)) AS days
+      FROM documents
+      GROUP BY caseId
+      HAVING COUNT(*) > 1
+    )
+    SELECT caseSubject, AVG(days) AS avgDays
+    FROM span
+    WHERE caseSubject IS NOT NULL AND caseSubject != ''
+    GROUP BY caseSubject
+    ORDER BY avgDays DESC
+  `.execute(db);
+  return result.rows.map((row) => ({
+    label: row.caseSubject,
+    value: Math.round(Number(row.avgDays)),
+  }));
+}
+
+export async function countHandlingTimeByCounty(
+  db: Kysely<DiariumDatabase>,
+): Promise<{ label: string; value: number }[]> {
+  const result = await sql<{ countyName: string; avgDays: number }>`
+    WITH caseCounty AS (
+      SELECT caseId, countyName FROM documents GROUP BY caseId
+    ),
+    span AS (
+      SELECT
+        caseId,
+        julianday(MAX(documentDate)) - julianday(MIN(documentDate)) AS days
+      FROM documents
+      GROUP BY caseId
+      HAVING COUNT(*) > 1
+    )
+    SELECT c.countyName, AVG(s.days) AS avgDays
+    FROM span s
+    JOIN caseCounty c ON c.caseId = s.caseId
+    WHERE c.countyName IS NOT NULL AND c.countyName != ''
+      AND c.countyName NOT LIKE '%FIKTIV%'
+    GROUP BY c.countyName
+    ORDER BY avgDays DESC
+  `.execute(db);
+  return result.rows.map((row) => ({
+    label: row.countyName
+      .replace(/\s*LÄN$/i, "")
+      .toLowerCase()
+      .replace(/^\p{L}/u, (c) => c.toUpperCase()),
+    value: Math.round(Number(row.avgDays)),
+  }));
+}

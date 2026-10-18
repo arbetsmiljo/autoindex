@@ -56,7 +56,7 @@ export default async function Inspections() {
         }}
       </Breadcrumbs>
       <Main>
-        <Container className="flex flex-col items-start space-y-4">
+        <Container className="flex flex-col items-start space-y-4 pb-16">
           <TopLevelHeading
             text={`Arbetsmiljöinspektioner ${process.env.NEXT_PUBLIC_YEAR}`}
           />
