@@ -15,8 +15,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@arbetsmarknad/components/Card";
-import { ChartContainer } from "@arbetsmarknad/components/Chart";
+} from "@svenskamodellen/components/Card";
+import { ChartContainer } from "@svenskamodellen/components/Chart";
 
 type SeasonBarChartProps = {
   title: string;

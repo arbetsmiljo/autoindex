@@ -14,7 +14,7 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "@arbetsmarknad/components": "^1.4.0",
+    "@svenskamodellen/components": "^1.4.0",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/better-sqlite3": "^7.6.12",

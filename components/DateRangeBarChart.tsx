@@ -9,13 +9,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@arbetsmarknad/components/Card";
+} from "@svenskamodellen/components/Card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@arbetsmarknad/components/Chart";
+} from "@svenskamodellen/components/Chart";
 
 type DateRangeBarChartProps = {
   title: string;

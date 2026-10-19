@@ -1,15 +1,15 @@
 import _ from "lodash";
-import { Breadcrumbs } from "@arbetsmarknad/components/Breadcrumb";
+import { Breadcrumbs } from "@svenskamodellen/components/Breadcrumb";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@arbetsmarknad/components/Card";
-import { Container } from "@arbetsmarknad/components/Container";
-import { Main } from "@arbetsmarknad/components/Main";
-import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
+} from "@svenskamodellen/components/Card";
+import { Container } from "@svenskamodellen/components/Container";
+import { Main } from "@svenskamodellen/components/Main";
+import { TopLevelHeading } from "@svenskamodellen/components/TopLevelHeading";
 import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 import {
   Table,
@@ -18,7 +18,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@arbetsmarknad/components/Table";
+} from "@svenskamodellen/components/Table";
 import {
   initKysely,
   selectDistinctCounties,
@@ -65,7 +65,7 @@ export default async function County(props: CountyProps) {
     <>
       <Breadcrumbs>
         {{
-          "https://arbetsmarknad.github.io/": "Arbetsmarknad",
+          "https://svenskamodellen.github.io/": "Svenska modellen",
           "/": "Arbetsmiljö",
           [`/${process.env.NEXT_PUBLIC_YEAR}`]: `${process.env.NEXT_PUBLIC_YEAR}`,
           [`/${process.env.NEXT_PUBLIC_YEAR}/geografi`]: "Geografi",

@@ -9,13 +9,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@arbetsmarknad/components/Card";
+} from "@svenskamodellen/components/Card";
 
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@arbetsmarknad/components/Chart";
+} from "@svenskamodellen/components/Chart";
 
 type PercentagePieChartProps = {
   title: string;

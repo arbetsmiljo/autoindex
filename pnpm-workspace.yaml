@@ -3,3 +3,5 @@ allowBuilds:
   esbuild: true
   sharp: true
   sqlite3: true
+minimumReleaseAgeExclude:
+  - '@svenskamodellen/components@1.5.0'
