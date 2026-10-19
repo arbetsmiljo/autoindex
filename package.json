@@ -1,5 +1,5 @@
 {
-  "author": "Henry Catalini Smith <henry@catalinismith.com>",
+  "author": "Henry Catalini Smith <henry@catalinismith.se>",
   "dependencies": {
     "better-sqlite3": "^11.8.1",
     "chart.js": "^4.4.7",
@@ -45,11 +45,11 @@
     }
   },
   "scripts": {
-    "build": "next build",
-    "dev": "next dev",
+    "build": "NEXT_PUBLIC_YEAR=$YEAR SOURCE_DIRECTORY_PATH=../arbetsmiljo-$YEAR next build",
+    "deploy": "npx gh-pages --nojekyll --no-history --branch gh-pages -d out --repo git@github.com:arbetsmiljo/$YEAR.git",
+    "dev": "NEXT_PUBLIC_YEAR=$YEAR SOURCE_DIRECTORY_PATH=../arbetsmiljo-$YEAR next dev",
     "lint": "next lint",
-    "ship": "NEXT_PUBLIC_YEAR=$YEAR SOURCE_DIRECTORY_PATH=../$YEAR pnpm build && npx gh-pages --nojekyll --no-history --branch gh-pages -d out --repo git@github.com:arbetsmiljo/$YEAR.git",
-    "start": "next start"
+    "ship": "pnpm build && pnpm deploy"
   },
   "version": "0.1.0"
 }

@@ -1,6 +1,15 @@
-# autoindex
+# arbetsmiljo-autoindex
 
-Generates a HTML index of Swedish work environment data from a particular year
+Generates a HTML index of Swedish work environment data for a single year.
+
+All filesystem lookups in this repo assume a runtime context matching the structure defined in the README of [arbetsmarknad/workspace](https://github.com/arbetsmarknad/workspace).
+
+## Commands
+
+- Run `YEAR=2023 pnpm dev` and open http://localhost:3000/2023/ for the dev server
+- Run `YEAR=2023 pnpm build` to run a production build
+- Run `pnpm deploy` to deploy the latest build to production
+- Run `YEAR=2023 pnpm ship` to run build + deploy in sequence
 
 ## License
 
