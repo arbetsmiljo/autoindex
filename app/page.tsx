@@ -64,10 +64,12 @@ export default async function Home() {
         }}
       </Breadcrumbs>
       <Main>
-        <Container className="flex flex-col items-start space-y-4">
-          <TopLevelHeading
-            text={`Arbetsmiljö ${process.env.NEXT_PUBLIC_YEAR}`}
-          />
+        <Container className="flex flex-col items-start space-y-8">
+          <div className="mb-4">
+            <TopLevelHeading
+              text={`Arbetsmiljö ${process.env.NEXT_PUBLIC_YEAR}`}
+            />
+          </div>
 
           <DateRangeBarChart
             title="Handlingar per dag"

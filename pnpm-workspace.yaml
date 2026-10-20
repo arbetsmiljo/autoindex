@@ -4,4 +4,4 @@ allowBuilds:
   sharp: true
   sqlite3: true
 minimumReleaseAgeExclude:
-  - '@svenskamodellen/components@1.5.0'
+  - '@svenskamodellen/components@1.6.0'
