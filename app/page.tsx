@@ -64,12 +64,10 @@ export default async function Home() {
         }}
       </Breadcrumbs>
       <Main>
-        <Container className="flex flex-col items-start space-y-8">
-          <div className="mb-4">
-            <TopLevelHeading
-              text={`Arbetsmiljö ${process.env.NEXT_PUBLIC_YEAR}`}
-            />
-          </div>
+        <Container className="flex flex-col items-start space-y-8 pb-8">
+          <TopLevelHeading
+            text={`Arbetsmiljödata och -statistik ${process.env.NEXT_PUBLIC_YEAR}`}
+          />
 
           <DateRangeBarChart
             title="Handlingar per dag"
@@ -78,7 +76,7 @@ export default async function Home() {
             valueLabel="Handlingar"
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 w-full">
             <PercentagePieChart
               title="Inspektionshandlingar"
               href={`/${process.env.NEXT_PUBLIC_YEAR}/inspektioner`}
@@ -97,7 +95,7 @@ export default async function Home() {
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 w-full">
             <Card className="flex flex-col gap-y-4 border-background-secondary">
               <CardHeader className="flex flex-row items-stretch space-y-0 border-background-secondary border-b p-0 sm:flex-row">
                 <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">

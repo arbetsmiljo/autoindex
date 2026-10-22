@@ -34,7 +34,7 @@ export default async function Accidents() {
         }}
       </Breadcrumbs>
       <Main>
-        <Container className="flex flex-col items-start space-y-4">
+        <Container className="flex flex-col items-start space-y-8 pb-8">
           <TopLevelHeading
             text={`Olycksfall ${process.env.NEXT_PUBLIC_YEAR}`}
           />

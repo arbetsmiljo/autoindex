@@ -74,7 +74,7 @@ export default async function County(props: CountyProps) {
       </Breadcrumbs>
 
       <Main>
-        <Container className="flex flex-col items-start space-y-4">
+        <Container className="flex flex-col items-start space-y-8 pb-8">
           <TopLevelHeading
             text={`Arbetsmiljö ${_.capitalize(county.countyName)} ${process.env.NEXT_PUBLIC_YEAR}`}
           />
@@ -86,7 +86,7 @@ export default async function County(props: CountyProps) {
             valueLabel="Handlingar"
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 w-full">
             <Card className="flex flex-col gap-y-4 border-background-secondary">
               <CardHeader className="items-center pb-0">
                 <CardTitle>Geografisk fördelning</CardTitle>

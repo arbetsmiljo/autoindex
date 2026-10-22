@@ -44,13 +44,11 @@ export default async function Inspections() {
         }}
       </Breadcrumbs>
       <Main>
-        <Container className="flex flex-col items-start space-y-8">
-          <div className="mb-4">
-            <TopLevelHeading
-              text={`Arbetsmiljöhandlingar ${process.env.NEXT_PUBLIC_YEAR}`}
-              subtext="Geografisk fördelning"
-            />
-          </div>
+        <Container className="flex flex-col items-start space-y-8 pb-8">
+          <TopLevelHeading
+            text={`Arbetsmiljöhandlingar ${process.env.NEXT_PUBLIC_YEAR}`}
+            subtext="Geografisk fördelning"
+          />
           <div className="grid grid-cols-1 gap-4 w-full">
             <Card className="flex flex-col gap-y-4 border-background-secondary">
               <CardHeader className="flex flex-row items-stretch space-y-0 border-background-secondary border-b p-0 sm:flex-row">

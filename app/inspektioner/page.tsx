@@ -56,7 +56,7 @@ export default async function Inspections() {
         }}
       </Breadcrumbs>
       <Main>
-        <Container className="flex flex-col items-start space-y-4">
+        <Container className="flex flex-col items-start space-y-8 pb-8">
           <TopLevelHeading
             text={`Arbetsmiljöinspektioner ${process.env.NEXT_PUBLIC_YEAR}`}
           />
@@ -78,10 +78,10 @@ export default async function Inspections() {
                 </div>
                 <div className="flex">
                   <div className="relative z-30 flex flex-1 flex-col justify-center gap-1 px-6 py-4 text-left border-background-secondary even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6">
-                    <span className="text-xs text-muted-foreground">
+                    <span className="body-text text-muted-foreground">
                       Totalt
                     </span>
-                    <span className="text-lg font-bold leading-none sm:text-3xl">
+                    <span className="section-heading">
                       {documentsPerInspectionType.reduce(
                         (acc, { count }) => acc + count,
                         0,
@@ -94,10 +94,10 @@ export default async function Inspections() {
                 <Table className="text-base">
                   <TableHeader>
                     <TableRow className="border-background-secondary">
-                      <TableHead className="font-bold px-0">
+                      <TableHead className="body-text font-bold px-0">
                         Inspektionskategori
                       </TableHead>
-                      <TableHead className="font-bold px-0">
+                      <TableHead className="body-text font-bold px-0">
                         Handlingar
                       </TableHead>
                     </TableRow>
@@ -109,9 +109,9 @@ export default async function Inspections() {
                           key={inspectionType}
                           className="border-background-secondary"
                         >
-                          <TableCell className="font-medium px-0">
+                          <TableCell className="px-0">
                             <a
-                              className="text-link underline"
+                              className="text-link underline body-text"
                               href={generateDiariumUrl({
                                 SearchText: `Inspektion inom ${inspectionType}`,
                                 FromDate: format(
@@ -131,7 +131,7 @@ export default async function Inspections() {
                               {inspectionType}
                             </a>
                           </TableCell>
-                          <TableCell className="px-0">{count}</TableCell>
+                          <TableCell className="px-0 body-text">{count}</TableCell>
                         </TableRow>
                       ),
                     )}
