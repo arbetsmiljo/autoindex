@@ -14,8 +14,8 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "@svenskamodellen/components": "^1.7.0",
     "@eslint/eslintrc": "^3",
+    "@svenskamodellen/components": "^1.8.0",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/better-sqlite3": "^7.6.12",
     "@types/lodash": "^4.17.15",
