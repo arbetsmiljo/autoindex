@@ -79,6 +79,7 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
               stroke="var(--color-foreground)"
               tickCount={6}
               tickSize={0}
+              tick={{ className: "body-text" }}
             />
             <XAxis
               dataKey="date"
@@ -87,6 +88,7 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
               tickMargin={4}
               minTickGap={32}
               stroke="var(--color-foreground)"
+              tick={{ className: "body-text" }}
               tickFormatter={(value) => {
                 const date = new Date(value);
                 return date.toLocaleDateString("sv-SE", {
