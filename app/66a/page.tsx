@@ -17,7 +17,7 @@ import {
   selectSixSixACases,
 } from "@/lib/database";
 import { generateDiariumUrl } from "@/lib/diarium";
-import { endOfYear, format, parseISO, startOfYear } from "date-fns";
+import { format, parseISO } from "date-fns";
 import {
   Table,
   TableBody,
@@ -56,12 +56,6 @@ export default async function SixSixA() {
       .where("documentId", "like", "%-1"),
   );
 
-  const year = parseISO(process.env.NEXT_PUBLIC_YEAR!);
-  const diariumUrl = generateDiariumUrl({
-    SearchText: "Begäran från skyddsombud om ingripande",
-    FromDate: format(startOfYear(year), "yyyy-MM-dd"),
-    ToDate: format(endOfYear(year), "yyyy-MM-dd"),
-  });
 
   return (
     <>
