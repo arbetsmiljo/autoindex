@@ -307,6 +307,55 @@ export async function countCasesPerSeason(
   }));
 }
 
+export async function selectSixSixACases(db: Kysely<DiariumDatabase>): Promise<
+  {
+    caseId: string;
+    documentDate: string;
+    caseName: string;
+    companyName?: string;
+    workplaceName?: string;
+    countyName?: string;
+    municipalityName?: string;
+  }[]
+> {
+  const result = await db
+    .selectFrom("documents")
+    .select([
+      "caseId",
+      "documentDate",
+      "caseName",
+      "companyName",
+      "workplaceName",
+      "countyName",
+      "municipalityName",
+    ])
+    .where((eb) =>
+      eb.or([
+        eb("caseName", "like", "%6:6a%"),
+        eb("caseName", "like", "%6-6a%"),
+        eb("caseName", "like", "%6 kap. 6 a%"),
+        eb("caseSubject", "like", "%6:6a%"),
+        eb("caseSubject", "like", "%6-6a%"),
+        eb("caseSubject", "like", "%6 kap. 6 a%"),
+        eb("documentType", "=", "Begäran från skyddsombud om ingripande"),
+      ]),
+    )
+    .where("documentId", "like", "%-1")
+    .orderBy("documentDate")
+    .orderBy("caseId")
+    .execute();
+
+  return result.map((row) => ({
+    caseId: row.caseId,
+    documentDate: row.documentDate,
+    caseName: row.caseName,
+    companyName: row.companyName ?? undefined,
+    workplaceName: row.workplaceName ?? undefined,
+    countyName: row.countyName ?? undefined,
+    municipalityName: row.municipalityName ?? undefined,
+  }));
+}
+
 export async function latestDocuments(db: Kysely<DiariumDatabase>): Promise<
   {
     documentId: string;

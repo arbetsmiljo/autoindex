@@ -153,6 +153,25 @@ export default async function Home() {
               complementLabel="Icke-asbest"
               percentSuffix="Asbest"
             />
+
+            <Card className="flex flex-col gap-y-4 border-background-secondary">
+              <CardHeader className="flex flex-row items-stretch space-y-0 border-background-secondary border-b p-0 sm:flex-row">
+                <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+                  <CardTitle>
+                    <a
+                      href={`/${process.env.NEXT_PUBLIC_YEAR}/6-6a`}
+                      className="text-link underline"
+                    >
+                      6:6a-begäranden
+                    </a>
+                  </CardTitle>
+                  <CardDescription>
+                    Statistik över begäranden från skyddsombud enligt 6 kap. 6 a §
+                    arbetsmiljölagen
+                  </CardDescription>
+                </div>
+              </CardHeader>
+            </Card>
           </div>
         </Container>
       </Main>
